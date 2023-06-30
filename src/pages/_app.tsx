@@ -19,7 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <main>
           <Container
             style={{
-              maxWidth: "1650px",
+              maxWidth: "1700px",
               minWidth: "356px",
             }}
           >

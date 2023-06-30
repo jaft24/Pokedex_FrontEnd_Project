@@ -4,18 +4,27 @@ import useSWR from "swr";
 import Link from "next/link";
 import * as PokemonApi from "@/network/pokemonApi";
 import { Button, Col, Row, Spinner } from "react-bootstrap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SearchComponent from "@/components/SearchComponent";
 import MoreFilters from "@/components/MoreFilters";
 import styles from "@/styles/SearchBar.module.css";
 
 export default function Home() {
   const router = useRouter();
-
   const page = parseInt(router.query.page?.toString() || "1");
+  const ability = "chlorophyll";
 
-  const { data, isLoading } = useSWR(["getPokemonPage", page], () =>
-    PokemonApi.getPokemonPage(page)
+  const [sortBy, setSortBy] = useState("Z");
+
+  const updateSelectedSortBy = (sortBy: string) => {
+    setSortBy(sortBy);
+  };
+
+  const { data, isLoading } = useSWR(
+    ["getAllPokemonPage", page, ability],
+    async () => {
+      return await PokemonApi.getPokemonPage({ page, ability });
+    }
   );
 
   useEffect(() => {
@@ -35,13 +44,19 @@ export default function Home() {
         alignItems: "center",
       }}
     >
-      <img
-        className="rounded mx-auto d-block mb-1"
-        src="https://raw.githubusercontent.com/JaletaTesgera/Pokedex/main/Images/pokemon-logo.png"
-        alt="Pokemon Logo"
-        width={225}
-        height={120}
-      />
+      <div
+        style={{
+          margin: "1%",
+        }}
+      >
+        <img
+          className="rounded mx-auto d-block mb-1"
+          src="/pokedex.png"
+          alt="Pokemon Logo"
+          width={275}
+          height={120}
+        />
+      </div>
 
       <div
         style={{
@@ -53,7 +68,7 @@ export default function Home() {
       >
         <div
           style={{
-            flex: "20%",
+            flex: "15%",
           }}
         >
           <MoreFilters />
@@ -64,10 +79,10 @@ export default function Home() {
             flex: "70%",
           }}
         >
-          <SearchComponent />
+          <SearchComponent updateSelectedSortBy={updateSelectedSortBy} />
 
           <div>
-            <Row xs={1} sm={2} md={3} lg={4} xl={5} className="g-4">
+            <Row xs={1} sm={2} md={3} lg={4} xl={5} className="g-5">
               {data?.content.map((pokemonEntry) => (
                 <Col key={pokemonEntry.name}>
                   <Link href={"/" + pokemonEntry.name + "?page=" + page}>

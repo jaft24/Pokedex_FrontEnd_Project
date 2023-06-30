@@ -26,7 +26,7 @@ export default function PokemonDetailsPage() {
   );
 
   const { data, isLoading } = useSWR(["getPokemonPage", currentPage], () =>
-    PokemonApi.getPokemonPage(currentPage)
+    PokemonApi.getPokemonPage({ page: currentPage })
   );
 
   const { data: previousPokemon } = useSWR(

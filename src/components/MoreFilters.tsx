@@ -7,7 +7,7 @@ import { useState } from "react";
 import { abilityList } from "@/data/abilities";
 import { genusList } from "@/data/genus";
 import { Pokemon } from "@/models/pokemon";
-import { combinedPokemonFilter } from "@/network/pokemonApi";
+import { getPokemon } from "@/network/pokemonApi";
 
 function beautifyString(str: string): string {
   const words = str.split("-");
@@ -27,7 +27,7 @@ const maxWeight: number = 950;
 const resetState = {
   heightSliderValue: null,
   weightSliderValue: null,
-  selectedType: null,
+  selectedType: undefined,
   selectedEgg: null,
   selectedAbility: "",
   selectedGenus: "",
@@ -38,7 +38,9 @@ function MoreFilters() {
   const [weightSliderValue, setWeightSliderValue] = useState<number | null>(
     6.9
   );
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedType, setSelectedType] = useState<string | undefined>(
+    undefined
+  );
   const [selectedEgg, setSelectedEgg] = useState<string | null>(null);
   const [selectedAbility, setSelectedAbility] = useState("");
   const [selectedGenus, setSelectedGenus] = useState("");

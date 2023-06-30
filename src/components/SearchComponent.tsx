@@ -9,31 +9,41 @@ import { Button } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import styles from "@/styles/SearchBar.module.css";
 import useSWR from "swr";
+import { pokemonNames } from "@/data/pokemonNames";
 
-function SearchComponent() {
+interface SearchComponentProps {
+  updateSelectedSortBy: (sortBy: string) => void;
+}
+function SearchComponent({ updateSelectedSortBy }: SearchComponentProps) {
   const [searchText, setSearchText] = useState<string | number>("");
   const [selectedSearchBy, setSelectedSearchBy] = useState("Name");
   const [matchedPokemon, setMatchedPokemon] = useState<string[] | number[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
 
+  const [selectedSortBy, setSelectedSortBy] = useState("idAsc");
+
+  //   useEffect(() => {
+  //     getSortInfoFromSearchComponent(selectedSortBy);
+  //   }, [selectedSortBy]);
+
   const router = useRouter();
   const page = parseInt(router.query.page?.toString() || "1");
   const { data, isLoading } = useSWR(["getPokemonPage", page], () =>
-    getPokemonPage(page)
+    getPokemonPage({ page })
   );
   const pokemonIds: number[] = Array.from(
     { length: data?.totalElements ?? 0 },
     (_, i) => i + 1
   );
 
-  const handleInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setSearchText(value);
 
     if (selectedSearchBy == "Name") {
       value !== null &&
         setMatchedPokemon(
-          (await getAllPokemonNames()).filter((pokemon) =>
+          pokemonNames.filter((pokemon) =>
             pokemon.toLowerCase().includes(value.toLowerCase())
           )
         );
@@ -79,7 +89,7 @@ function SearchComponent() {
           flexDirection: "row",
           alignItems: "flex-start",
           justifyContent: "space-between",
-          flex: "60%",
+          flex: "50%",
         }}
       >
         <div
@@ -155,11 +165,21 @@ function SearchComponent() {
         }}
       >
         Sort By:{" "}
-        <select className={styles.input_wrapper}>
-          <option defaultChecked> Id (Asc) </option>
-          <option> Id (Desc) </option>
-          <option> Name (A-Z) </option>
-          <option> Name (Z-A) </option>
+        <select
+          className={styles.input_wrapper}
+          value={selectedSortBy}
+          onChange={(event) => {
+            const selectedSortByValue = event.target.value;
+            setSelectedSortBy(selectedSortByValue);
+          }}
+        >
+          <option value={"idAsc"} defaultChecked>
+            {" "}
+            Id (Asc){" "}
+          </option>
+          <option value={"idDesc"}> Id (Desc) </option>
+          <option value={"nameAsc"}> Name (A-Z) </option>
+          <option value={"nameDesc"}> Name (Z-A) </option>
         </select>{" "}
       </div>
     </div>

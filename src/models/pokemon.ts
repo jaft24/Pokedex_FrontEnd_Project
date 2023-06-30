@@ -11,7 +11,7 @@ export interface Pokemon {
     description: string;
   }
   
-  interface PokemonType {
+  export interface PokemonType {
     id: number;
     type: string;
   }
