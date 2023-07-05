@@ -62,20 +62,24 @@ export async function getAllPokemon({
   ability?: string;
   eggGroup?: string;
 }) {
-  const url = new URL("/api/pokemon/filter");
+  const params: Record<string, string | number> = {};
 
-  url.searchParams.append("page", page.toString());
-  if (id) url.searchParams.append("id", id);
-  if (name) url.searchParams.append("name", name);
-  if (sort) url.searchParams.append("sort", sort);
-  if (type) url.searchParams.append("type", type);
-  if (genus) url.searchParams.append("genus", genus);
-  if (height) url.searchParams.append("height", height.toString());
-  if (weight) url.searchParams.append("weight", weight.toString());
-  if (eggGroup) url.searchParams.append("eggGroup", eggGroup);
-  if (ability) url.searchParams.append("ability", ability);
+  params.page = page;
+  if (id) params.id = id;
+  if (name) params.name = name;
+  if (sort) params.sort = sort;
+  if (genus) params.genus = genus;
+  if (height) params.height = height;
+  if (weight) params.weight = weight;
+  if (type) params.type = type;
+  if (ability) params.ability = ability;
+  if (eggGroup) params.eggGroup = eggGroup;
 
-  const response = await axiosInstance2.get<PokemonPage>(url.toString());
+  const response = await axiosInstance2.get<PokemonPage>(
+    "/api/pokemon/filter",
+    { params }
+  );
+
   return response.data;
 }
 
@@ -92,7 +96,7 @@ export async function getPokemonPage({
   eggGroup,
 }: {
   page: number;
-  id?: string;
+  id?: number;
   name?: string;
   sort?: string;
   genus?: string;

@@ -66,7 +66,7 @@
 }
 
 .slider::-webkit-slider-runnable-track {
-    width: 300px;
+    max-width: 115px;
     height: 3px;
     background: #ddd;
     border: none;
@@ -89,4 +89,9 @@
 
 .slider:focus::-webkit-slider-runnable-track {
     background: #ccc;
+}
+
+.outline {
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif ;
+  font-size: larger;
 }

@@ -1,67 +1,43 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import {
-  getAllPokemonNames,
-  getAllPokemonList,
-  getPokemonPage,
-} from "@/network/pokemonApi";
-import { useRouter } from "next/router";
-import { Button } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import styles from "@/styles/SearchBar.module.css";
-import useSWR from "swr";
-import { pokemonNames } from "@/data/pokemonNames";
 
-interface SearchComponentProps {
-  updateSelectedSortBy: (sortBy: string) => void;
-}
-function SearchComponent({ updateSelectedSortBy }: SearchComponentProps) {
-  const [searchText, setSearchText] = useState<string | number>("");
-  const [selectedSearchBy, setSelectedSearchBy] = useState("Name");
-  const [matchedPokemon, setMatchedPokemon] = useState<string[] | number[]>([]);
+function SearchComponent({
+  selectedSortBy,
+  onSortByChange,
+  searchText,
+  onSearchTextChange,
+  selectedSearchBy,
+  onSearchByChange,
+  matchedPokemon,
+  onMatchedPokemonChange,
+  onInputChange,
+  onSearchSubmit,
+  onListClick,
+}: {
+  selectedSortBy: string;
+  onSortByChange: any;
+  searchText: string | number;
+  onSearchTextChange: (value: string | number) => void;
+  selectedSearchBy: string;
+  onSearchByChange: (value: string) => void;
+  matchedPokemon: string[] | number[];
+  onMatchedPokemonChange: (value: string[] | number[]) => void;
+  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSearchSubmit: any;
+  onListClick: any;
+}) {
   const searchRef = useRef<HTMLDivElement>(null);
 
-  const [selectedSortBy, setSelectedSortBy] = useState("idAsc");
-
-  //   useEffect(() => {
-  //     getSortInfoFromSearchComponent(selectedSortBy);
-  //   }, [selectedSortBy]);
-
-  const router = useRouter();
-  const page = parseInt(router.query.page?.toString() || "1");
-  const { data, isLoading } = useSWR(["getPokemonPage", page], () =>
-    getPokemonPage({ page })
-  );
-  const pokemonIds: number[] = Array.from(
-    { length: data?.totalElements ?? 0 },
-    (_, i) => i + 1
-  );
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setSearchText(value);
-
-    if (selectedSearchBy == "Name") {
-      value !== null &&
-        setMatchedPokemon(
-          pokemonNames.filter((pokemon) =>
-            pokemon.toLowerCase().includes(value.toLowerCase())
-          )
-        );
-    } else if (selectedSearchBy == "Id") {
-      value !== null &&
-        setMatchedPokemon(
-          pokemonIds.filter((pokemon) => pokemon.toString().includes(value))
-        );
-    }
-  };
-
-  const handleClick = (pokemon: string | number) => {
-    setSearchText(pokemon);
+  const handleListClick = (pokemon: string | number) => {
+    onListClick(pokemon);
+    onSearchTextChange(pokemon);
+    onMatchedPokemonChange([]);
   };
 
   const handleClickOutside = (e: MouseEvent) => {
     if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
-      setMatchedPokemon([]);
+      onMatchedPokemonChange([]);
     }
   };
 
@@ -105,7 +81,7 @@ function SearchComponent({ updateSelectedSortBy }: SearchComponentProps) {
           <select
             className={styles.input_wrapper}
             value={selectedSearchBy}
-            onChange={(event) => setSelectedSearchBy(event.target.value)}
+            onChange={(event) => onSearchByChange(event.target.value)}
           >
             <option value={"Name"} defaultChecked>
               {" "}
@@ -133,8 +109,9 @@ function SearchComponent({ updateSelectedSortBy }: SearchComponentProps) {
               className={styles.input}
               type="text"
               value={searchText}
-              onChange={handleInputChange}
+              onChange={(e) => onInputChange(e)}
               placeholder="Search Pokémon"
+              onKeyDown={onSearchSubmit}
             />
           </div>
 
@@ -147,7 +124,7 @@ function SearchComponent({ updateSelectedSortBy }: SearchComponentProps) {
                   fontWeight: 100,
                 }}
                 className={styles.results_each}
-                onClick={() => handleClick(pokemon)}
+                onClick={() => handleListClick(pokemon)}
                 key={pokemon}
               >
                 {pokemon}
@@ -170,16 +147,16 @@ function SearchComponent({ updateSelectedSortBy }: SearchComponentProps) {
           value={selectedSortBy}
           onChange={(event) => {
             const selectedSortByValue = event.target.value;
-            setSelectedSortBy(selectedSortByValue);
+            onSortByChange(selectedSortByValue);
           }}
         >
-          <option value={"idAsc"} defaultChecked>
+          <option value={"1"} defaultChecked>
             {" "}
             Id (Asc){" "}
           </option>
-          <option value={"idDesc"}> Id (Desc) </option>
-          <option value={"nameAsc"}> Name (A-Z) </option>
-          <option value={"nameDesc"}> Name (Z-A) </option>
+          <option value={"-1"}> Id (Desc) </option>
+          <option value={"A"}> Name (A-Z) </option>
+          <option value={"Z"}> Name (Z-A) </option>
         </select>{" "}
       </div>
     </div>

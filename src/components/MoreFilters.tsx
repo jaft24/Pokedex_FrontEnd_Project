@@ -3,11 +3,8 @@ import { TypeButton } from "./FilterButtons";
 import { typeHexColor } from "@/data/colors";
 import { eggGroupHexColor } from "@/data/colors";
 import styles from "@/styles/SearchBar.module.css";
-import { useState } from "react";
 import { abilityList } from "@/data/abilities";
 import { genusList } from "@/data/genus";
-import { Pokemon } from "@/models/pokemon";
-import { getPokemon } from "@/network/pokemonApi";
 
 function beautifyString(str: string): string {
   const words = str.split("-");
@@ -19,58 +16,47 @@ function beautifyString(str: string): string {
   return capitalizedWords.join(" ");
 }
 
-const maxHeight: number = 1450;
-const minWeight: number = 0.1;
-const minHeight: number = 20;
-const maxWeight: number = 950;
+const maxHeight: number = 145;
+const minWeight: number = 1;
+const minHeight: number = 2;
+const maxWeight: number = 9500;
 
-const resetState = {
-  heightSliderValue: null,
-  weightSliderValue: null,
-  selectedType: undefined,
-  selectedEgg: null,
-  selectedAbility: "",
-  selectedGenus: "",
-};
-
-function MoreFilters() {
-  const [heightSliderValue, setHeightSliderValue] = useState<number | null>(70);
-  const [weightSliderValue, setWeightSliderValue] = useState<number | null>(
-    6.9
-  );
-  const [selectedType, setSelectedType] = useState<string | undefined>(
-    undefined
-  );
-  const [selectedEgg, setSelectedEgg] = useState<string | null>(null);
-  const [selectedAbility, setSelectedAbility] = useState("");
-  const [selectedGenus, setSelectedGenus] = useState("");
-
-  const [matchedPokemon, setMatchedPokemon] = useState<Pokemon[]>([]);
-
+function MoreFilters({
+  selectedHeight,
+  onSelectedHeightChange,
+  selectedWeight,
+  onSelectedWeightChange,
+  selectedType,
+  onSelectedTypeChange,
+  selectedGenus,
+  onSelectedGenusChange,
+  selectedEggGroup,
+  onSelectedEggGroupChange,
+  selectedAbility,
+  onSelectedAbilityChange,
+  onClickAdvancedSearch,
+  onClickClearFilters,
+}: {
+  selectedHeight: number | undefined;
+  onSelectedHeightChange: any;
+  selectedWeight: number | undefined;
+  onSelectedWeightChange: any;
+  selectedType: string | undefined;
+  onSelectedTypeChange: any;
+  selectedGenus: string | undefined;
+  onSelectedGenusChange: any;
+  selectedEggGroup: string | undefined;
+  onSelectedEggGroupChange: any;
+  selectedAbility: string | undefined;
+  onSelectedAbilityChange: any;
+  onClickAdvancedSearch: any;
+  onClickClearFilters: any;
+}) {
   const handleTypeButtonClick = (type: string) => {
-    setSelectedType(type);
+    onSelectedTypeChange(type);
   };
-
   const handleEggButtonClick = (egg: string) => {
-    setSelectedEgg(egg);
-  };
-
-  const handleAdvacnedSearch = async () => {
-    console.log(heightSliderValue);
-    console.log(weightSliderValue);
-    console.log(selectedType);
-    console.log(selectedEgg);
-    console.log(selectedAbility);
-    console.log(selectedGenus);
-  };
-
-  const handleClearFilter = () => {
-    setHeightSliderValue(resetState.heightSliderValue);
-    setWeightSliderValue(resetState.weightSliderValue);
-    setSelectedType(resetState.selectedType);
-    setSelectedEgg(resetState.selectedEgg);
-    setSelectedAbility(resetState.selectedAbility);
-    setSelectedGenus(resetState.selectedGenus);
+    onSelectedEggGroupChange(egg);
   };
 
   return (
@@ -78,14 +64,14 @@ function MoreFilters() {
       style={{
         display: "flex",
         flexDirection: "column",
-        maxWidth: 260,
+        maxWidth: 261,
         gap: 12,
         margin: 10,
       }}
     >
       <i>
         {" "}
-        <strong> Advacned Search </strong>{" "}
+        <strong className={styles.outline}> Advacned Search </strong>{" "}
       </i>
 
       <div
@@ -100,16 +86,20 @@ function MoreFilters() {
           type="range"
           min={minHeight}
           max={maxHeight}
-          value={heightSliderValue ?? ""}
+          value={selectedHeight ?? ""}
           className={styles.slider}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setHeightSliderValue(parseInt(e.target.value));
+          onChange={(event) => {
+            const selectedHeightValue = event.target.value;
+            onSelectedHeightChange(selectedHeightValue);
           }}
           style={{
             height: 10,
           }}
         />
-        <p style={{ marginBottom: "1%" }}> {heightSliderValue ?? " -- "} Cm</p>
+        <p style={{ marginBottom: "1%" }}>
+          {" "}
+          {selectedHeight ? selectedHeight * 10 : " - "} Cm
+        </p>
       </div>
 
       <div
@@ -124,17 +114,21 @@ function MoreFilters() {
           type="range"
           min={minWeight}
           max={maxWeight}
-          value={weightSliderValue ?? ""}
+          value={selectedWeight ?? ""}
           className={styles.slider}
           step="0.1"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setWeightSliderValue(parseFloat(e.target.value));
+          onChange={(event) => {
+            const selectedWeightValue = event.target.value;
+            onSelectedWeightChange(selectedWeightValue);
           }}
           style={{
             height: 10,
           }}
         />
-        <p style={{ marginBottom: "1%" }}> {weightSliderValue ?? " -- "} Kg</p>
+        <p style={{ marginBottom: "1%" }}>
+          {" "}
+          {selectedWeight ? (selectedWeight / 10).toFixed(2) : " - "} Kg
+        </p>
       </div>
 
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -178,9 +172,12 @@ function MoreFilters() {
               width: "100%",
             }}
             value={selectedAbility}
-            onChange={(event) => setSelectedAbility(event.target.value)}
+            onChange={(event) => {
+              const selectedAbilityValue = event.target.value;
+              onSelectedAbilityChange(selectedAbilityValue);
+            }}
           >
-            <option value={""}></option>
+            <option value={undefined}></option>
             {abilityList.map((ability) => (
               <option value={ability.ability} key={ability.id}>
                 {beautifyString(ability.ability)}
@@ -208,7 +205,7 @@ function MoreFilters() {
               <TypeButton
                 typeName={beautifyString(egg.eggGroup)}
                 typeColor={egg.color}
-                isSelected={selectedEgg === egg.eggGroup}
+                isSelected={selectedEggGroup === egg.eggGroup}
                 onClick={() => handleEggButtonClick(egg.eggGroup)}
               />
             </div>
@@ -231,9 +228,12 @@ function MoreFilters() {
               width: "100%",
             }}
             value={selectedGenus}
-            onChange={(event) => setSelectedGenus(event.target.value)}
+            onChange={(event) => {
+              const selectedGenusValue = event.target.value;
+              onSelectedGenusChange(selectedGenusValue);
+            }}
           >
-            <option value={""}></option>
+            <option value={undefined}></option>
             {genusList.map((genus) => (
               <option value={genus.genus} key={genus.id}>
                 {beautifyString(genus.genus)}
@@ -250,7 +250,10 @@ function MoreFilters() {
         }}
       >
         <div>
-          <Button className={styles.custom_button} onClick={handleClearFilter}>
+          <Button
+            className={styles.custom_button}
+            onClick={onClickClearFilters}
+          >
             {" "}
             Clear Filters{" "}
           </Button>
@@ -259,7 +262,7 @@ function MoreFilters() {
         <div>
           <Button
             className={styles.custom_button}
-            onClick={handleAdvacnedSearch}
+            onClick={onClickAdvancedSearch}
           >
             {" "}
             🔍 Search{" "}
