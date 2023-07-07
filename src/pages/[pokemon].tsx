@@ -92,7 +92,8 @@ export default function PokemonDetailsPage() {
     return <LoadingComponent />;
   }
 
-  //I'm running out of my available time for review here, this is where I left off
+  //I'm running out of my available time for review here, I'm going to
+  // have to be a little more brief with the rest of it.
 
   return (
     <>
@@ -108,6 +109,10 @@ export default function PokemonDetailsPage() {
             >
               {({ data }) => {
                 if (typeof data === "string") {
+                  //I was surprised to see this in there, I thought that color thief
+                  // was no longer working properly.
+                  //
+                  // What else could data be other than a string here?
                   setBackgroundColor(data);
                   document.body.style.background = data;
                 }
@@ -153,10 +158,15 @@ export default function PokemonDetailsPage() {
                     color: "black",
                   }}
                   onClick={() => (window.location.href = "/")}
+                  //I'm seeing multiple ways that you're handling navigation, I would recommend
+                    //picking one and sticking with it, it will make your code more consistent
                   className={styles.custom_button}
                 >
                   {" "}
                   Home{" "}
+
+                  {/* This below SVG could live be in it's own file in an image directory or something*/}
+
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -219,6 +229,12 @@ export default function PokemonDetailsPage() {
                         transform: "scale(1.15)",
                       }}
                     >
+
+                      {/*
+                        Once again, I think this could be consolidated into its own component
+                        since every example of this button is very similar.
+                      */}
+
                       <TypeButton
                         typeName={beautifyString(type.type)}
                         typeColor={
@@ -227,6 +243,7 @@ export default function PokemonDetailsPage() {
                         }
                         isSelected={false}
                         onClick={() => {}}
+                        //This can be removed since it's not being used
                       />
                     </div>
                   ))}
@@ -273,16 +290,32 @@ export default function PokemonDetailsPage() {
                   <img
                     src={getPokemonGifBackByName(pokemon.name)}
                     alt={"Pokemon: " + pokemon.name}
+                    //Nice alt text!
                     style={{ margin: "-2%", marginTop: "5%" }}
                     width={130}
                     height={130}
                   />
                 </div>
+                {/*
+
+                This page is already getting pretty huge and I see more nesting upcoming below
+                I would recommend breaking this out into it's own component so it's more
+                compartmentalized and easier to read.
+
+                */}
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <table align="center" className="font-monospace">
+                    {/*
+
+                    Each of these table rows appears to have a great deal of duplication
+                    Maybe you could find a way to create some kind of <TableRow> component
+                    that helps you to reduce the duplication?
+
+                    */}
                     <tr>
                       <td rowSpan={3}>
                         <div style={{ margin: 5 }}>
+                          {/* Another SVG that should be moved to its own file */}
                           <svg
                             fill="none"
                             height="75"
@@ -394,6 +427,7 @@ export default function PokemonDetailsPage() {
                           transform: "scale(1.15)",
                         }}
                       >
+                        {/* Same comment as before with this portion */}
                         <TypeButton
                           typeName={beautifyString(egg.eggGroup)}
                           typeColor={
@@ -414,6 +448,12 @@ export default function PokemonDetailsPage() {
                     .map((ability) => beautifyString(ability.ability))
                     .join(", ")}
                 </div>
+                {/*
+
+                  This whole section below seems like another good candidate for
+                  breaking into its own component.
+
+                */}
                 <div style={{ marginBottom: "3%" }}>
                   <strong>Stats:</strong>{" "}
                   <ul
@@ -426,10 +466,17 @@ export default function PokemonDetailsPage() {
                     }}
                   >
                     <li>
+                      {/*
+
+                      If <StatProgressChart is always nested beneath <li>
+                      maybe it makes sense to move it to be part of the same component?
+
+                      */}
                       <StatProgressChart
                         statValue={pokemon.stat.hp}
                         maxstatValue={maxValues.maxHp}
                         label={"Hp"}
+                        //No need for the brackets above here
                         color={backgroundColor}
                       />{" "}
                     </li>
@@ -518,3 +565,13 @@ export default function PokemonDetailsPage() {
     </>
   );
 }
+/*
+One more general comment, this file could probably be broken up into many
+ smaller components. As a general rule, even ~100 lines of code I would consider
+ to be a lot for a single component. There are quite a few different things that
+ are happening all withing the same page.
+
+ This also makes the code much more readable and easier to maintain, since smaller components
+ have less interdependencies and are simpler to reason about.
+ */
+

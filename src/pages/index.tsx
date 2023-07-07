@@ -13,6 +13,7 @@ import { AxiosError } from "axios";
 import LoadingComponent from "@/components/LoadingComponent";
 import ErrorComponent from "@/components/ErrorComponent";
 import PokemonNotFoundComponent from "@/components/PokemonNotFoundComponent";
+//There are a couple more unused imports here.
 
 export default function Home() {
   const router = useRouter();
@@ -23,7 +24,9 @@ export default function Home() {
     (_, i) => i + 1
   );
 
+  // Similar critiques below to the ones I've made in other components.
   const [name, setName] = useState<string | undefined>(undefined);
+  // Does name really need to be a union type? Could you start with a default value of "" instead?
   const [id, setId] = useState<string | undefined>(undefined);
   const [gridVisibility, setGridVisibility] = useState("block");
 
@@ -32,9 +35,16 @@ export default function Home() {
   const [matchedPokemon, setMatchedPokemon] = useState<string[] | number[]>([]);
 
   const [selectedSortBy, setSelectedSortBy] = useState("1");
+  /*
+
+  I would have expected by the variable name that this was a string...
+  but something like "asc" or "desc"
+
+  */
   const handleSortByChange = (selectedValue: SetStateAction<string>) => {
     setSelectedSortBy(selectedValue);
   };
+  //I think you could just use selectedSortBy rather than creating a new variable
   const sort = selectedSortBy;
 
   const [height, setHeight] = useState<number | undefined>(undefined);
@@ -64,6 +74,15 @@ export default function Home() {
   };
   const [genus, setGenus] = useState<string | undefined>(undefined);
   const [selectedGenus, setSelectedGenus] = useState(undefined);
+
+  /*
+
+    This is a ton of state to have in just this one component, normally I like to have
+    my main page components be as "dumb" as possible, and have the state be managed by
+    the sub-components that area dealing with more of the functionality.
+
+   */
+
   const handleGenusChange = (selectedValue: SetStateAction<undefined>) => {
     setSelectedGenus(selectedValue);
   };
