@@ -1,4 +1,11 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+
+/*
+ ChangeEvent and useState are both unused imports, my code editor
+ highlights this form me and it's a good habit to set up your editor to do the same.
+ We shouldn't be adding unused imports to our files.
+ */
+
 import { FaSearch } from "react-icons/fa";
 import styles from "@/styles/SearchBar.module.css";
 
@@ -26,7 +33,9 @@ function SearchComponent({
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSearchSubmit: any;
   onListClick: any;
+  //Same feedback that I gave over in MoreFilters.tsx also applies here.
 }) {
+
   const searchRef = useRef<HTMLDivElement>(null);
 
   const handleListClick = (pokemon: string | number) => {
@@ -47,6 +56,17 @@ function SearchComponent({
       window.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+    /*
+
+    I'm a little bit confused by the code from lines 39 - 58. I don't think you should need
+    to use a ref value here, I think useState should be enough. Maybe there was an issue where
+    this components was being unrendered or something clearning out your search?
+
+    If you were having problems retaining your search text, you could place it into the url
+
+    Additionally, do you remember why the handleClickOutside bit was needed?
+     */
 
   return (
     <div
@@ -88,6 +108,13 @@ function SearchComponent({
               Name{" "}
             </option>
             <option value={"Id"}> Id </option>
+              {/*
+              You don't need to wrap a string in curly brackets, instead you
+              can just do the following:
+
+                <option value="Id">Id</option>
+
+              */}
           </select>{" "}
         </div>
 
@@ -117,6 +144,12 @@ function SearchComponent({
 
           <div className={styles.results_list}>
             {matchedPokemon.map((pokemon) => (
+                /*
+                I see a pokemon type in your models folder, could that be used here?
+
+                Additionally <li> elements should always be nested beneath
+                <ul> or <ol> elements rather than directly below a <div>
+                 */
               <li
                 style={{
                   listStyleType: "none",
@@ -148,6 +181,7 @@ function SearchComponent({
           onChange={(event) => {
             const selectedSortByValue = event.target.value;
             onSortByChange(selectedSortByValue);
+            //Similar critique to the other file, you don't really need this extra variable around
           }}
         >
           <option value={"1"} defaultChecked>

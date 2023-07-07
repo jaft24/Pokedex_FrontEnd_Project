@@ -9,6 +9,7 @@ export default function PokemonNotFoundComponent() {
       }}
     >
       <img style={{ margin: 10 }} src="/pikachu_no.gif" />
+        {/* Alt tag could be added above*/}
       <p className="font-monospace text-center text-capitalize">
         {" "}
         Opps, Nothing to see here. <br />
@@ -17,3 +18,16 @@ export default function PokemonNotFoundComponent() {
     </div>
   );
 }
+
+/*
+
+I would prefer the following ES6 syntax, I linked an article in one of
+the previous files that I reviewed with more information about it.
+
+export default const PokemonNotFoundComponent = () => (
+    <div>
+        <p>...</p>
+    </div>
+ );
+
+ */

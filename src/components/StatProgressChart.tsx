@@ -17,6 +17,7 @@ export default function StatProgressChart({
     <div style={{ width: "100px" }}>
       <VisibilitySensor>
         {({ isVisible }: { isVisible: any }) => {
+          //ANother instances of an "any" type, this looks like a boolean.
           const percentage = isVisible
             ? parseInt(((statValue * 100) / maxstatValue).toFixed(0))
             : 0;
@@ -35,6 +36,7 @@ export default function StatProgressChart({
               }}
               value={percentage}
               text={`${label}:${statValue}`}
+              //Nice use of template literals :)
             />
           );
         }}

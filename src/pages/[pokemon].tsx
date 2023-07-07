@@ -19,6 +19,7 @@ import {
 import StatProgressChart from "@/components/StatProgressChart";
 import { Button } from "react-bootstrap";
 import Link from "next/link";
+//More unused imports
 
 export default function PokemonDetailsPage() {
   const router = useRouter();
@@ -67,12 +68,15 @@ export default function PokemonDetailsPage() {
       router.push(`/${nextPokemon.name}?page=${currentPage}`);
     }
   }
+  //This might be personal preverence, but when I only use a function a single time
+  // like this, I prefer to just do the operation inline
   function handleBackToListClick() {
     const queryParams = new URLSearchParams({ page: previousPage.toString() });
     const url = `/?${queryParams.toString()}`;
     window.location.href = url;
   }
 
+  //I've seen this beautifyString things in a few differnet places now, it could be a shared util
   function beautifyString(str: string): string {
     const words = str.split("-");
     const capitalizedWords = words.map((word) => {
@@ -87,6 +91,8 @@ export default function PokemonDetailsPage() {
   } else if (pokemonLoading) {
     return <LoadingComponent />;
   }
+
+  //I'm running out of my available time for review here, this is where I left off
 
   return (
     <>

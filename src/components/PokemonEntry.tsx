@@ -16,7 +16,13 @@ function beautifyString(str: string): string {
   return capitalizedWords.join(" ");
 }
 
+//This function is exactly duplicated from the MoreFilters.tsx file that we just were looking at.
+// I would recommend moving this to a shared file and importing it into both files.
+
 export default function PokemonEntry({ name }: { name: string }) {
+  //If you have access to the pokemon object, you can use it to get the id rather than the name.
+  // it is always preferred to reference the id rather than other information about an object,
+  // especially if this is the primary key that is used in the database (uuids would be another example).
   const { pokemon, pokemonLoading } = usePokemon(name);
 
   return (
@@ -39,11 +45,16 @@ export default function PokemonEntry({ name }: { name: string }) {
             <div>
               <small style={{ fontSize: "1", fontWeight: "lighter" }}>
                 # 0{pokemon.id} &nbsp;{" "}
+                {/*
+                Here you are using a mixture of spaces and non-breaking spaces to get the spacing working
+                I think its better to just handle this via CSS or choose one or the other.
+                 */}
               </small>
             </div>
             <div>
               <p className="font-monospace text-center text-capitalize">
                 {" " + pokemon.name}
+                {/* Another examples of spacing that could be css rather than extra spaces*/}
               </p>
             </div>
           </div>
@@ -58,6 +69,13 @@ export default function PokemonEntry({ name }: { name: string }) {
             }}
           >
             {pokemon.types.map((type) => (
+                /*
+                 Nice use of map.
+
+                 I am noticing now that I've seen a few of these that every instance of
+                 <TypeButton> is wrapped with the exact same div. Perhaps this all could
+                 live inside of the same shared component?
+                 */
               <div
                 key={type.id}
                 style={{ display: "flex", justifyContent: "space-around" }}

@@ -15,6 +15,9 @@ export default function ErrorComponent() {
         alignItems: "center",
       }}
     >
+      {/* The image tag below is missing an alt tag. This doesn't break anything,
+      but alt tags communicate useful information to people using screen readers
+      search enginges or web scrapers. */}
       <img src="/pikachu_404Error.gif" height={400} />
       <p className="font-monospace text-center text-capitalize">
         {" "}
@@ -30,6 +33,9 @@ export default function ErrorComponent() {
         className={styles.custom_button}
       >
         {" "}
+          {/* I'm seeing a bunch of instnaces of these brackets with spacing in multiple places.
+          In my opinion, its much better to do these kinds of spacing things with CSS rather than
+          add additional space characters around text. */}
         ← Home{" "}
       </Button>
     </div>

@@ -3,6 +3,8 @@ import api, { axiosInstance2 } from "./axiosInstance";
 import { PokemonPage } from "@/models/pokemonPage";
 import axiosInstance from "./axiosInstance";
 
+
+//This function could be called getPokemonByName() to be more explicit
 export async function getPokemon(name: string) {
   const response = await api.get<Pokemon>("byName/" + name);
   return response.data;
@@ -13,6 +15,7 @@ export async function getPokemonbyId(id: number) {
   return response.data;
 }
 
+//From this line down to line 44, none of the functions are used in the app
 export async function getPokemonPageReverseId(page: number) {
   const response = await api.get<PokemonPage>(`/allRev?page=${page - 1}`);
   return response.data;
@@ -64,6 +67,7 @@ export async function getAllPokemon({
 }) {
   const params: Record<string, string | number> = {};
 
+  //As I'll highlight below, there is a much better way to deal with all of these query params
   params.page = page;
   if (id) params.id = id;
   if (name) params.name = name;
@@ -106,6 +110,9 @@ export async function getPokemonPage({
   ability?: string;
   eggGroup?: string;
 }) {
+  //Rather than doing this all manually, axios.get() can take an object with the params
+  // so you don't have to manually build up the query string
+
   let url: string = `/filter?page=${page - 1}`;
   if (id) url = url + `&id=${id}`;
   if (name) url = url + `&name=${name}`;
@@ -119,4 +126,7 @@ export async function getPokemonPage({
 
   const response = await axiosInstance.get<PokemonPage>(url);
   return response.data;
+
+  //Additionally, if you are finding these requests are challenging to deal with
+  // or are looking for some extra curricular stuff to try out, I would recoomend react query.
 }

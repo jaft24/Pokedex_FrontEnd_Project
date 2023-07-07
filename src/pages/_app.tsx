@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { Container } from "react-bootstrap";
 import Head from "next/head";
 
+//This variable isn't used at all
 const inter = Inter({ subsets: ["latin"] });
 
 export default function App({ Component, pageProps }: AppProps) {
