@@ -8,14 +8,14 @@ export default function ErrorComponent() {
         position: "fixed",
         top: "50%",
         left: "50%",
-        transform: "translate(-55%, -65%)",
+        transform: "translate(-50%, -65%)",
         justifyContent: "center",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
       }}
     >
-      <img src="/pikachu_404Error.gif" height={400} />
+      <img src="/pikachu_404Error.gif" />
       <p className="font-monospace text-center text-capitalize">
         {" "}
         404 Not Found!

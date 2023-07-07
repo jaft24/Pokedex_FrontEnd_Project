@@ -47,7 +47,6 @@ export default function PokemonEntry({ name }: { name: string }) {
               </p>
             </div>
           </div>
-
           <div
             style={{
               display: "grid",

@@ -1,6 +1,7 @@
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import VisibilitySensor from "react-visibility-sensor";
+import styles from "@/styles/SearchBar.module.css";
 
 export default function StatProgressChart({
   statValue,
@@ -14,7 +15,7 @@ export default function StatProgressChart({
   color: string;
 }) {
   return (
-    <div style={{ width: "100px" }}>
+    <div style={{ width: "100px" }} className={styles.pokemon_components}>
       <VisibilitySensor>
         {({ isVisible }: { isVisible: any }) => {
           const percentage = isVisible

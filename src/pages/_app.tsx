@@ -19,8 +19,12 @@ export default function App({ Component, pageProps }: AppProps) {
         <main>
           <Container
             style={{
-              maxWidth: "1700px",
+              maxWidth: "1400px",
               minWidth: "356px",
+              backgroundImage: "url('/background_image.png')",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
             }}
           >
             <Component {...pageProps} />

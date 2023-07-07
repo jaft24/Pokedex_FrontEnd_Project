@@ -1,14 +1,7 @@
 export default function PokemonNotFoundComponent() {
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-      }}
-    >
-      <img style={{ margin: 10 }} src="/pikachu_no.gif" />
+    <div style={{ transform: "scale(0.85)" }}>
+      <img src="/pikachu_no.gif" />
       <p className="font-monospace text-center text-capitalize">
         {" "}
         Opps, Nothing to see here. <br />

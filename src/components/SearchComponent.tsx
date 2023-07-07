@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import styles from "@/styles/SearchBar.module.css";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 function SearchComponent({
   selectedSortBy,
@@ -28,6 +29,7 @@ function SearchComponent({
   onListClick: any;
 }) {
   const searchRef = useRef<HTMLDivElement>(null);
+  const isDesktop = useMediaQuery("(min-width: 960px)");
 
   const handleListClick = (pokemon: string | number) => {
     onListClick(pokemon);
@@ -49,117 +51,212 @@ function SearchComponent({
   }, []);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginBottom: "1%",
-        width: "100%",
-      }}
-    >
-      <div
-        ref={searchRef}
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          flex: "50%",
-        }}
-      >
+    <>
+      {isDesktop ? (
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-evenly",
             flexDirection: "row",
-            flex: "20%",
-          }}
-        >
-          Search By:{" "}
-          <select
-            className={styles.input_wrapper}
-            value={selectedSearchBy}
-            onChange={(event) => onSearchByChange(event.target.value)}
-          >
-            <option value={"Name"} defaultChecked>
-              {" "}
-              Name{" "}
-            </option>
-            <option value={"Id"}> Id </option>
-          </select>{" "}
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            flex: "60%",
+            justifyContent: "space-between",
+            marginBottom: "1%",
+            width: "100%",
           }}
         >
           <div
-            className={styles.input_wrapper}
+            ref={searchRef}
             style={{
-              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+              flex: "50%",
             }}
           >
-            <FaSearch id="search-icon" />
-            <input
-              className={styles.input}
-              type="text"
-              value={searchText}
-              onChange={(e) => onInputChange(e)}
-              placeholder="Search Pokémon"
-              onKeyDown={onSearchSubmit}
-            />
-          </div>
-
-          <div className={styles.results_list}>
-            {matchedPokemon.map((pokemon) => (
-              <li
-                style={{
-                  listStyleType: "none",
-                  padding: 8,
-                  fontWeight: 100,
-                }}
-                className={styles.results_each}
-                onClick={() => handleListClick(pokemon)}
-                key={pokemon}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+                flexDirection: "row",
+                flex: "20%",
+              }}
+            >
+              Search By:{" "}
+              <select
+                className={styles.input_wrapper}
+                value={selectedSearchBy}
+                onChange={(event) => onSearchByChange(event.target.value)}
               >
-                {pokemon}
-              </li>
-            ))}
+                <option value={"Name"} defaultChecked>
+                  {" "}
+                  Name{" "}
+                </option>
+                <option value={"Id"}> Id </option>
+              </select>{" "}
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                flex: "60%",
+              }}
+            >
+              <div
+                className={styles.input_wrapper}
+                style={{
+                  width: "100%",
+                }}
+              >
+                <FaSearch id="search-icon" />
+                <input
+                  className={styles.input}
+                  type="text"
+                  value={searchText}
+                  onChange={(e) => onInputChange(e)}
+                  placeholder="Search Pokémon"
+                  onKeyDown={onSearchSubmit}
+                />
+              </div>
+
+              <div className={styles.results_list}>
+                {matchedPokemon.map((pokemon) => (
+                  <li
+                    style={{
+                      listStyleType: "none",
+                      padding: 8,
+                      fontWeight: 100,
+                    }}
+                    className={styles.results_each}
+                    onClick={() => handleListClick(pokemon)}
+                    key={pokemon}
+                  >
+                    {pokemon}
+                  </li>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              flexDirection: "row",
+              flex: "0%",
+            }}
+          >
+            Sort By:{" "}
+            <select
+              className={styles.input_wrapper}
+              value={selectedSortBy}
+              onChange={(event) => {
+                const selectedSortByValue = event.target.value;
+                onSortByChange(selectedSortByValue);
+              }}
+            >
+              <option value={"1"} defaultChecked>
+                {" "}
+                Id (Asc){" "}
+              </option>
+              <option value={"-1"}> Id (Desc) </option>
+              <option value={"A"}> Name (A-Z) </option>
+              <option value={"Z"}> Name (Z-A) </option>
+            </select>{" "}
           </div>
         </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          flexDirection: "row",
-          flex: "0%",
-        }}
-      >
-        Sort By:{" "}
-        <select
-          className={styles.input_wrapper}
-          value={selectedSortBy}
-          onChange={(event) => {
-            const selectedSortByValue = event.target.value;
-            onSortByChange(selectedSortByValue);
-          }}
-        >
-          <option value={"1"} defaultChecked>
-            {" "}
-            Id (Asc){" "}
-          </option>
-          <option value={"-1"}> Id (Desc) </option>
-          <option value={"A"}> Name (A-Z) </option>
-          <option value={"Z"}> Name (Z-A) </option>
-        </select>{" "}
-      </div>
-    </div>
+      ) : (
+        <div style={{}}>
+          <div ref={searchRef}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                width: "100%",
+                margin: 15,
+                gap: 5,
+              }}
+            >
+              <div
+                style={{ width: "100%", display: "flex", gap: 10, flex: "60%" }}
+              >
+                Search By:{" "}
+                <select
+                  style={{ width: "50%" }}
+                  className={styles.input_wrapper}
+                  value={selectedSearchBy}
+                  onChange={(event) => onSearchByChange(event.target.value)}
+                >
+                  <option value={"Name"} defaultChecked>
+                    {" "}
+                    Name{" "}
+                  </option>
+                  <option value={"Id"}> Id </option>
+                </select>{" "}
+              </div>
+
+              <div
+                style={{ width: "100%", display: "flex", gap: 10, flex: "50%" }}
+              >
+                Sort By:{" "}
+                <select
+                  className={styles.input_wrapper}
+                  value={selectedSortBy}
+                  onChange={(event) => {
+                    const selectedSortByValue = event.target.value;
+                    onSortByChange(selectedSortByValue);
+                  }}
+                >
+                  <option value={"1"} defaultChecked>
+                    {" "}
+                    Id (Asc){" "}
+                  </option>
+                  <option value={"-1"}> Id (Desc) </option>
+                  <option value={"A"}> Name (A-Z) </option>
+                  <option value={"Z"}> Name (Z-A) </option>
+                </select>{" "}
+              </div>
+            </div>
+
+            <div style={{ paddingBottom: 15 }}>
+              <div
+                className={styles.input_wrapper}
+                style={{
+                  width: "102%",
+                }}
+              >
+                <FaSearch id="search-icon" />
+                <input
+                  className={styles.input}
+                  type="text"
+                  value={searchText}
+                  onChange={(e) => onInputChange(e)}
+                  placeholder="Search Pokémon"
+                  onKeyDown={onSearchSubmit}
+                />
+              </div>
+
+              <div className={styles.results_list}>
+                {matchedPokemon.map((pokemon) => (
+                  <li
+                    style={{
+                      listStyleType: "none",
+                      padding: 8,
+                      fontWeight: 100,
+                    }}
+                    className={styles.results_each}
+                    onClick={() => handleListClick(pokemon)}
+                    key={pokemon}
+                  >
+                    {pokemon}
+                  </li>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

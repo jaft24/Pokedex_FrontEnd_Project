@@ -26,6 +26,11 @@ export default function Home() {
   const [name, setName] = useState<string | undefined>(undefined);
   const [id, setId] = useState<string | undefined>(undefined);
   const [gridVisibility, setGridVisibility] = useState("block");
+  const [showAdvacnedFeaturesButton, setShowAdvacnedFeaturesButton] =
+    useState(true);
+  const [showAdvacnedFeatures, setShowAdvacnedFeatures] = useState(false);
+  const [hideAdvacnedFeaturesButton, setHidehowAdvacnedFeatures] =
+    useState(false);
 
   const [searchText, setSearchText] = useState<string | number>("");
   const [selectedSearchBy, setSelectedSearchBy] = useState("Name");
@@ -73,6 +78,9 @@ export default function Home() {
     if (value !== "") {
       setSearchText(value);
       setGridVisibility("none");
+      setShowAdvacnedFeatures(false);
+      setShowAdvacnedFeaturesButton(true);
+      setHidehowAdvacnedFeatures(false);
 
       if (selectedSearchBy === "Name") {
         setMatchedPokemon(
@@ -91,6 +99,17 @@ export default function Home() {
       setMatchedPokemon([]);
     }
   };
+  const handleShowAdvacnedSearch = () => {
+    setShowAdvacnedFeatures(true);
+    setShowAdvacnedFeaturesButton(false);
+    setHidehowAdvacnedFeatures(true);
+  };
+  const handleHideAdvacnedSearch = () => {
+    setShowAdvacnedFeatures(false);
+    setShowAdvacnedFeaturesButton(true);
+    setHidehowAdvacnedFeatures(false);
+  };
+
   const handleSearchSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
     router.push({ query: { ...router.query, page: 0 } });
     matchedPokemon.some((each) => each === searchText) &&
@@ -188,7 +207,7 @@ export default function Home() {
     >
       <div
         style={{
-          margin: "1%",
+          padding: "1%",
         }}
       >
         <img
@@ -205,35 +224,15 @@ export default function Home() {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-around",
-          alignItems: "flex-start",
+          alignItems: "center",
         }}
       >
         <div
           style={{
-            flex: "10%",
-          }}
-        >
-          <MoreFilters
-            selectedHeight={selectedHeight}
-            onSelectedHeightChange={handleHeightChange}
-            selectedWeight={selectedWeight}
-            onSelectedWeightChange={handleWeightChange}
-            selectedType={selectedType}
-            onSelectedTypeChange={handleTypeChange}
-            selectedGenus={selectedGenus}
-            onSelectedGenusChange={handleGenusChange}
-            selectedEggGroup={selectedEggGroup}
-            onSelectedEggGroupChange={handleEggGroupChange}
-            selectedAbility={selectedAbility}
-            onSelectedAbilityChange={handleAbilityChange}
-            onClickAdvancedSearch={handleAdvacnedSearch}
-            onClickClearFilters={handleClearFilters}
-          />
-        </div>
-
-        <div
-          style={{
-            flex: "70%",
+            display: "flex",
+            flexDirection: "column",
+            width: 1300,
+            alignItems: "center",
           }}
         >
           <SearchComponent
@@ -250,15 +249,79 @@ export default function Home() {
             onListClick={handleListClick}
           />
 
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              margin: 20,
+              marginTop: -30,
+            }}
+          >
+            {showAdvacnedFeaturesButton && (
+              <div>
+                <Button
+                  style={{}}
+                  className={styles.custom_button}
+                  onClick={handleShowAdvacnedSearch}
+                >
+                  {" "}
+                  ↯ Show Advanced Search ↯{" "}
+                </Button>
+              </div>
+            )}
+
+            {showAdvacnedFeatures && (
+              <div className={showAdvacnedFeatures ? styles.slide_down : ""}>
+                <MoreFilters
+                  selectedHeight={selectedHeight}
+                  onSelectedHeightChange={handleHeightChange}
+                  selectedWeight={selectedWeight}
+                  onSelectedWeightChange={handleWeightChange}
+                  selectedType={selectedType}
+                  onSelectedTypeChange={handleTypeChange}
+                  selectedGenus={selectedGenus}
+                  onSelectedGenusChange={handleGenusChange}
+                  selectedEggGroup={selectedEggGroup}
+                  onSelectedEggGroupChange={handleEggGroupChange}
+                  selectedAbility={selectedAbility}
+                  onSelectedAbilityChange={handleAbilityChange}
+                  onClickAdvancedSearch={handleAdvacnedSearch}
+                  onClickClearFilters={handleClearFilters}
+                />
+              </div>
+            )}
+            {hideAdvacnedFeaturesButton && (
+              <div>
+                <Button
+                  style={{ marginTop: -5 }}
+                  className={styles.custom_button}
+                  onClick={handleHideAdvacnedSearch}
+                >
+                  {" "}
+                  ⇪ Hide Advanced Search ⇪{" "}
+                </Button>
+              </div>
+            )}
+          </div>
+
           {data?.numberOfElements != 0 ? (
             <div
               style={{
                 display: { gridVisibility }.gridVisibility,
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <Row xs={1} sm={2} md={3} lg={4} xl={5} className="g-5">
+              <Row className="g-5">
                 {data?.content.map((pokemonEntry) => (
-                  <Col key={pokemonEntry.name}>
+                  <Col
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                    key={pokemonEntry.name}
+                  >
                     <Link href={"/" + pokemonEntry.name + "?page=" + page}>
                       <PokemonEntry name={pokemonEntry.name} />
                     </Link>
@@ -266,7 +329,10 @@ export default function Home() {
                 ))}
               </Row>
 
-              <div className="d-flex justify-content-center gap-2 mt-4">
+              <div
+                style={{ marginBottom: 70 }}
+                className="d-flex justify-content-center gap-5"
+              >
                 {!data?.first && (
                   <Button
                     style={{ width: "25%" }}

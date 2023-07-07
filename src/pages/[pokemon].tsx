@@ -8,8 +8,9 @@ import styles from "@/styles/SearchBar.module.css";
 import Color from "color-thief-react";
 import LoadingComponent from "@/components/LoadingComponent";
 import ErrorComponent from "@/components/ErrorComponent";
-
-import { useState } from "react";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import { useLongMobileQuery } from "@/hooks/useMediaQuery";
+import { useEffect, useState } from "react";
 import { TypeButton } from "@/components/FilterButtons";
 import { eggGroupHexColor, typeHexColor } from "@/data/colors";
 import {
@@ -18,9 +19,12 @@ import {
 } from "@/image/pokemonGif";
 import StatProgressChart from "@/components/StatProgressChart";
 import { Button } from "react-bootstrap";
-import Link from "next/link";
 
 export default function PokemonDetailsPage() {
+  const isDesktop = useMediaQuery("(min-width: 960px)");
+  const isTablet = useMediaQuery("(min-width: 560px)");
+  const isLongMobile = useLongMobileQuery();
+
   const router = useRouter();
   const pokemonName = router.query.pokemon?.toString() || "";
   const [backgroundColor, setBackgroundColor] = useState("white");
@@ -92,7 +96,13 @@ export default function PokemonDetailsPage() {
     <>
       <Head>{pokemon && <title> {pokemon.name} </title>}</Head>
 
-      <div className="d-flex flex-column align-items-center mt-5">
+      <div
+        style={{
+          minWidth: "356px",
+          padding: isTablet ? 50 : 0,
+        }}
+        className="d-flex flex-column align-items-center"
+      >
         {pokemon && (
           <>
             <Color
@@ -117,9 +127,12 @@ export default function PokemonDetailsPage() {
                 backgroundImage:
                   "linear-gradient(180deg, rgba(153,182,214,1) 0%, rgba(255,255,255,1) 100%)",
                 padding: 50,
-                maxWidth: 900,
-                maxHeight: 950,
-                borderRadius: 20,
+                maxWidth: isDesktop ? 900 : 600,
+                maxHeight: isDesktop ? 950 : "",
+                minWidth: "354px",
+                borderRadius: isTablet ? 20 : 0,
+                marginLeft: 20,
+                paddingBottom: isLongMobile ? 70 : 50,
               }}
             >
               <div
@@ -137,7 +150,7 @@ export default function PokemonDetailsPage() {
                   className={styles.custom_button}
                 >
                   {" "}
-                  ← Back To List{" "}
+                  {isDesktop ? "← Back To List" : "← Back"}
                 </Button>{" "}
                 <Button
                   style={{
@@ -234,143 +247,318 @@ export default function PokemonDetailsPage() {
                 }}
               />
 
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-around",
-                }}
-              >
-                <div>
-                  <Image
-                    src={getPokemonImageUrl(pokemon.id)}
-                    alt={"Pokemon: " + pokemon.name}
-                    style={{ margin: "-2%" }}
-                    width={300}
-                    height={300}
-                  />
-                </div>
+              {isDesktop ? (
                 <div
                   style={{
                     display: "flex",
-                    flexDirection: "column",
-                    alignContent: "space-between",
+                    alignItems: "center",
+                    justifyContent: "space-around",
                   }}
                 >
-                  <img
-                    src={getPokemonGifByName(pokemon.name)}
-                    alt={"Pokemon: " + pokemon.name}
-                    style={{ margin: "-2%", marginBottom: "5%" }}
-                    width={130}
-                    height={130}
-                  />
-                  <img
-                    src={getPokemonGifBackByName(pokemon.name)}
-                    alt={"Pokemon: " + pokemon.name}
-                    style={{ margin: "-2%", marginTop: "5%" }}
-                    width={130}
-                    height={130}
-                  />
-                </div>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <table align="center" className="font-monospace">
-                    <tr>
-                      <td rowSpan={3}>
-                        <div style={{ margin: 5 }}>
-                          <svg
-                            fill="none"
-                            height="75"
-                            viewBox="0 0 17 16"
-                            width="75"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              className="path"
-                              d="M4.44996 13H13.2166L12.1666 5.66669H5.49996L4.44996 13ZM8.83329 4.66669C9.12218 4.66669 9.36107 4.56946 9.54996 4.37502C9.73885 4.18058 9.83329 3.94446 9.83329 3.66669C9.83329 3.3778 9.73885 3.13891 9.54996 2.95002C9.36107 2.76113 9.12218 2.66669 8.83329 2.66669C8.55552 2.66669 8.3194 2.76113 8.12496 2.95002C7.93052 3.13891 7.83329 3.3778 7.83329 3.66669C7.83329 3.94446 7.93052 4.18058 8.12496 4.37502C8.3194 4.56946 8.55552 4.66669 8.83329 4.66669ZM10.5666 4.66669H12.1666C12.4222 4.66669 12.6444 4.74724 12.8333 4.90835C13.0222 5.06946 13.1333 5.2778 13.1666 5.53335L14.2 12.8667C14.2444 13.1667 14.1694 13.4306 13.975 13.6584C13.7805 13.8861 13.5277 14 13.2166 14H4.44996C4.13885 14 3.88607 13.8861 3.69163 13.6584C3.49718 13.4306 3.42218 13.1667 3.46663 12.8667L4.49996 5.53335C4.53329 5.2778 4.6444 5.06946 4.83329 4.90835C5.02218 4.74724 5.2444 4.66669 5.49996 4.66669H7.09996C7.01107 4.51113 6.9444 4.3528 6.89996 4.19169C6.85552 4.03058 6.83329 3.85558 6.83329 3.66669C6.83329 3.11113 7.02774 2.63891 7.41663 2.25002C7.80552 1.86113 8.27774 1.66669 8.83329 1.66669C9.38885 1.66669 9.86107 1.86113 10.25 2.25002C10.6388 2.63891 10.8333 3.11113 10.8333 3.66669C10.8333 3.85558 10.8111 4.03058 10.7666 4.19169C10.7222 4.3528 10.6555 4.51113 10.5666 4.66669ZM4.44996 13H13.2166H4.44996Z"
-                              fill={backgroundColor}
-                            />
-                          </svg>{" "}
-                        </div>
-                      </td>
-                      <td>
-                        <small style={{ fontSize: "1", fontWeight: "lighter" }}>
-                          Weight &nbsp;
-                        </small>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        {pokemon.weight / 10}
-                        <small style={{ fontSize: "1", fontWeight: "lighter" }}>
-                          {" "}
-                          kg{" "}
-                        </small>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        {((pokemon.weight / 10) * 2.20462).toFixed(2)}
-                        <small style={{ fontSize: "1", fontWeight: "lighter" }}>
-                          {" "}
-                          lbs{" "}
-                        </small>
-                      </td>
-                    </tr>
-
-                    <hr
-                      style={{
-                        borderBlockColor: backgroundColor,
-                        borderBlockWidth: "3px",
-                      }}
+                  <div>
+                    <Image
+                      src={getPokemonImageUrl(pokemon.id)}
+                      alt={"Pokemon: " + pokemon.name}
+                      style={{ margin: "-2%" }}
+                      width={300}
+                      height={300}
                     />
-
-                    <tr>
-                      <td rowSpan={3}>
-                        <div style={{ margin: 5 }}>
-                          <svg
-                            fill="none"
-                            height="75"
-                            viewBox="0 0 17 16"
-                            width="75"
-                            xmlns="http://www.w3.org/2000/svg"
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignContent: "space-between",
+                    }}
+                  >
+                    <img
+                      src={getPokemonGifByName(pokemon.name)}
+                      alt={"Pokemon: " + pokemon.name}
+                      style={{ margin: "-2%", marginBottom: "5%" }}
+                      width={130}
+                      height={130}
+                    />
+                    <img
+                      src={getPokemonGifBackByName(pokemon.name)}
+                      alt={"Pokemon: " + pokemon.name}
+                      style={{ margin: "-2%", marginTop: "5%" }}
+                      width={130}
+                      height={130}
+                    />
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <table align="center" className="font-monospace">
+                      <tr>
+                        <td rowSpan={3}>
+                          <div style={{ margin: 5 }}>
+                            <svg
+                              fill="none"
+                              height="75"
+                              viewBox="0 0 17 16"
+                              width="75"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                className="path"
+                                d="M4.44996 13H13.2166L12.1666 5.66669H5.49996L4.44996 13ZM8.83329 4.66669C9.12218 4.66669 9.36107 4.56946 9.54996 4.37502C9.73885 4.18058 9.83329 3.94446 9.83329 3.66669C9.83329 3.3778 9.73885 3.13891 9.54996 2.95002C9.36107 2.76113 9.12218 2.66669 8.83329 2.66669C8.55552 2.66669 8.3194 2.76113 8.12496 2.95002C7.93052 3.13891 7.83329 3.3778 7.83329 3.66669C7.83329 3.94446 7.93052 4.18058 8.12496 4.37502C8.3194 4.56946 8.55552 4.66669 8.83329 4.66669ZM10.5666 4.66669H12.1666C12.4222 4.66669 12.6444 4.74724 12.8333 4.90835C13.0222 5.06946 13.1333 5.2778 13.1666 5.53335L14.2 12.8667C14.2444 13.1667 14.1694 13.4306 13.975 13.6584C13.7805 13.8861 13.5277 14 13.2166 14H4.44996C4.13885 14 3.88607 13.8861 3.69163 13.6584C3.49718 13.4306 3.42218 13.1667 3.46663 12.8667L4.49996 5.53335C4.53329 5.2778 4.6444 5.06946 4.83329 4.90835C5.02218 4.74724 5.2444 4.66669 5.49996 4.66669H7.09996C7.01107 4.51113 6.9444 4.3528 6.89996 4.19169C6.85552 4.03058 6.83329 3.85558 6.83329 3.66669C6.83329 3.11113 7.02774 2.63891 7.41663 2.25002C7.80552 1.86113 8.27774 1.66669 8.83329 1.66669C9.38885 1.66669 9.86107 1.86113 10.25 2.25002C10.6388 2.63891 10.8333 3.11113 10.8333 3.66669C10.8333 3.85558 10.8111 4.03058 10.7666 4.19169C10.7222 4.3528 10.6555 4.51113 10.5666 4.66669ZM4.44996 13H13.2166H4.44996Z"
+                                fill={backgroundColor}
+                              />
+                            </svg>{" "}
+                          </div>
+                        </td>
+                        <td>
+                          <small
+                            style={{ fontSize: "1", fontWeight: "lighter" }}
                           >
-                            <path
-                              className="path"
-                              d="M4.5 2.33331C4.5 2.06665 4.6 1.83331 4.8 1.63331C5 1.43331 5.23333 1.33331 5.5 1.33331L11.5 1.33331C11.7556 1.33331 11.9861 1.43331 12.1917 1.63331C12.3972 1.83331 12.5 2.06665 12.5 2.33331V13.6666C12.5 13.9333 12.3972 14.1666 12.1917 14.3666C11.9861 14.5666 11.7556 14.6666 11.5 14.6666H5.5C5.23333 14.6666 5 14.5666 4.8 14.3666C4.6 14.1666 4.5 13.9333 4.5 13.6666V2.33331ZM5.5 2.33331L5.5 13.6666H11.5V11.5H8.5V10.5H11.5V8.49998H8.5V7.49998H11.5V5.49998H8.5V4.49998H11.5V2.33331L5.5 2.33331ZM8.5 4.49998V5.49998V4.49998ZM8.5 7.49998V8.49998V7.49998ZM8.5 10.5V11.5V10.5Z"
-                              fill={backgroundColor}
-                            />
-                          </svg>{" "}
-                        </div>
-                      </td>
-                      <td>
-                        <small style={{ fontSize: "1", fontWeight: "lighter" }}>
-                          Height &nbsp;
-                        </small>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        {pokemon.height * 10}
-                        <small style={{ fontSize: "1", fontWeight: "lighter" }}>
-                          {" "}
-                          cm{" "}
-                        </small>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        {((pokemon.weight * 10) / 0.393701).toFixed(2)}
-                        <small style={{ fontSize: "1", fontWeight: "lighter" }}>
-                          {" "}
-                          in{" "}
-                        </small>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
+                            Weight &nbsp;
+                          </small>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          {pokemon.weight / 10}
+                          <small
+                            style={{ fontSize: "1", fontWeight: "lighter" }}
+                          >
+                            {" "}
+                            kg{" "}
+                          </small>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          {((pokemon.weight / 10) * 2.20462).toFixed(2)}
+                          <small
+                            style={{ fontSize: "1", fontWeight: "lighter" }}
+                          >
+                            {" "}
+                            lbs{" "}
+                          </small>
+                        </td>
+                      </tr>
 
-              <div className="d-inline-block mt-2 font-monospace">
+                      <hr
+                        style={{
+                          borderBlockColor: backgroundColor,
+                          borderBlockWidth: "3px",
+                        }}
+                      />
+
+                      <tr>
+                        <td rowSpan={3}>
+                          <div style={{ margin: 5 }}>
+                            <svg
+                              fill="none"
+                              height="75"
+                              viewBox="0 0 17 16"
+                              width="75"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                className="path"
+                                d="M4.5 2.33331C4.5 2.06665 4.6 1.83331 4.8 1.63331C5 1.43331 5.23333 1.33331 5.5 1.33331L11.5 1.33331C11.7556 1.33331 11.9861 1.43331 12.1917 1.63331C12.3972 1.83331 12.5 2.06665 12.5 2.33331V13.6666C12.5 13.9333 12.3972 14.1666 12.1917 14.3666C11.9861 14.5666 11.7556 14.6666 11.5 14.6666H5.5C5.23333 14.6666 5 14.5666 4.8 14.3666C4.6 14.1666 4.5 13.9333 4.5 13.6666V2.33331ZM5.5 2.33331L5.5 13.6666H11.5V11.5H8.5V10.5H11.5V8.49998H8.5V7.49998H11.5V5.49998H8.5V4.49998H11.5V2.33331L5.5 2.33331ZM8.5 4.49998V5.49998V4.49998ZM8.5 7.49998V8.49998V7.49998ZM8.5 10.5V11.5V10.5Z"
+                                fill={backgroundColor}
+                              />
+                            </svg>{" "}
+                          </div>
+                        </td>
+                        <td>
+                          <small
+                            style={{ fontSize: "1", fontWeight: "lighter" }}
+                          >
+                            Height &nbsp;
+                          </small>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          {pokemon.height * 10}
+                          <small
+                            style={{ fontSize: "1", fontWeight: "lighter" }}
+                          >
+                            {" "}
+                            cm{" "}
+                          </small>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          {((pokemon.weight * 10) / 0.393701).toFixed(2)}
+                          <small
+                            style={{ fontSize: "1", fontWeight: "lighter" }}
+                          >
+                            {" "}
+                            in{" "}
+                          </small>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+
+                      gap: 30,
+                    }}
+                  >
+                    <div>
+                      <Image
+                        src={getPokemonImageUrl(pokemon.id)}
+                        alt={"Pokemon: " + pokemon.name}
+                        style={{ margin: "-2%" }}
+                        width={300}
+                        height={300}
+                      />
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignContent: "space-between",
+                      }}
+                    >
+                      <img
+                        src={getPokemonGifByName(pokemon.name)}
+                        alt={"Pokemon: " + pokemon.name}
+                        style={{ margin: "-2%", marginBottom: "5%" }}
+                        width={130}
+                        height={130}
+                      />
+                      <img
+                        src={getPokemonGifBackByName(pokemon.name)}
+                        alt={"Pokemon: " + pokemon.name}
+                        style={{ margin: "-2%", marginTop: "5%" }}
+                        width={130}
+                        height={130}
+                      />
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      margin: 20,
+                      display: "flex",
+                      gap: 25,
+                      alignItems: "center",
+                    }}
+                  >
+                    <table align="center" className="font-monospace">
+                      <tr>
+                        <td rowSpan={3}>
+                          <div style={{ margin: 5 }}>
+                            <svg
+                              fill="none"
+                              height="75"
+                              viewBox="0 0 17 16"
+                              width="75"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                className="path"
+                                d="M4.44996 13H13.2166L12.1666 5.66669H5.49996L4.44996 13ZM8.83329 4.66669C9.12218 4.66669 9.36107 4.56946 9.54996 4.37502C9.73885 4.18058 9.83329 3.94446 9.83329 3.66669C9.83329 3.3778 9.73885 3.13891 9.54996 2.95002C9.36107 2.76113 9.12218 2.66669 8.83329 2.66669C8.55552 2.66669 8.3194 2.76113 8.12496 2.95002C7.93052 3.13891 7.83329 3.3778 7.83329 3.66669C7.83329 3.94446 7.93052 4.18058 8.12496 4.37502C8.3194 4.56946 8.55552 4.66669 8.83329 4.66669ZM10.5666 4.66669H12.1666C12.4222 4.66669 12.6444 4.74724 12.8333 4.90835C13.0222 5.06946 13.1333 5.2778 13.1666 5.53335L14.2 12.8667C14.2444 13.1667 14.1694 13.4306 13.975 13.6584C13.7805 13.8861 13.5277 14 13.2166 14H4.44996C4.13885 14 3.88607 13.8861 3.69163 13.6584C3.49718 13.4306 3.42218 13.1667 3.46663 12.8667L4.49996 5.53335C4.53329 5.2778 4.6444 5.06946 4.83329 4.90835C5.02218 4.74724 5.2444 4.66669 5.49996 4.66669H7.09996C7.01107 4.51113 6.9444 4.3528 6.89996 4.19169C6.85552 4.03058 6.83329 3.85558 6.83329 3.66669C6.83329 3.11113 7.02774 2.63891 7.41663 2.25002C7.80552 1.86113 8.27774 1.66669 8.83329 1.66669C9.38885 1.66669 9.86107 1.86113 10.25 2.25002C10.6388 2.63891 10.8333 3.11113 10.8333 3.66669C10.8333 3.85558 10.8111 4.03058 10.7666 4.19169C10.7222 4.3528 10.6555 4.51113 10.5666 4.66669ZM4.44996 13H13.2166H4.44996Z"
+                                fill={backgroundColor}
+                              />
+                            </svg>{" "}
+                          </div>
+                        </td>
+                        <td>
+                          <small
+                            style={{ fontSize: "1", fontWeight: "lighter" }}
+                          >
+                            Weight &nbsp;
+                          </small>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          {pokemon.weight / 10}
+                          <small
+                            style={{ fontSize: "1", fontWeight: "lighter" }}
+                          >
+                            {" "}
+                            kg{" "}
+                          </small>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          {((pokemon.weight / 10) * 2.20462).toFixed(2)}
+                          <small
+                            style={{ fontSize: "1", fontWeight: "lighter" }}
+                          >
+                            {" "}
+                            lbs{" "}
+                          </small>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <table align="center" className="font-monospace">
+                      <tr>
+                        <td rowSpan={3}>
+                          <div style={{ margin: 5 }}>
+                            <svg
+                              fill="none"
+                              height="75"
+                              viewBox="0 0 17 16"
+                              width="75"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                className="path"
+                                d="M4.5 2.33331C4.5 2.06665 4.6 1.83331 4.8 1.63331C5 1.43331 5.23333 1.33331 5.5 1.33331L11.5 1.33331C11.7556 1.33331 11.9861 1.43331 12.1917 1.63331C12.3972 1.83331 12.5 2.06665 12.5 2.33331V13.6666C12.5 13.9333 12.3972 14.1666 12.1917 14.3666C11.9861 14.5666 11.7556 14.6666 11.5 14.6666H5.5C5.23333 14.6666 5 14.5666 4.8 14.3666C4.6 14.1666 4.5 13.9333 4.5 13.6666V2.33331ZM5.5 2.33331L5.5 13.6666H11.5V11.5H8.5V10.5H11.5V8.49998H8.5V7.49998H11.5V5.49998H8.5V4.49998H11.5V2.33331L5.5 2.33331ZM8.5 4.49998V5.49998V4.49998ZM8.5 7.49998V8.49998V7.49998ZM8.5 10.5V11.5V10.5Z"
+                                fill={backgroundColor}
+                              />
+                            </svg>{" "}
+                          </div>
+                        </td>
+                        <td>
+                          <small
+                            style={{ fontSize: "1", fontWeight: "lighter" }}
+                          >
+                            Height &nbsp;
+                          </small>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          {pokemon.height * 10}
+                          <small
+                            style={{ fontSize: "1", fontWeight: "lighter" }}
+                          >
+                            {" "}
+                            cm{" "}
+                          </small>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          {((pokemon.weight * 10) / 0.393701).toFixed(2)}
+                          <small
+                            style={{ fontSize: "1", fontWeight: "lighter" }}
+                          >
+                            {" "}
+                            in{" "}
+                          </small>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              <div className="d-inline-block mt-3 font-monospace">
                 <div style={{ display: "flex", gap: 15 }}>
                   <strong>Egg Groups:</strong>{" "}
                   <div
@@ -410,64 +598,56 @@ export default function PokemonDetailsPage() {
                 </div>
                 <div style={{ marginBottom: "3%" }}>
                   <strong>Stats:</strong>{" "}
-                  <ul
+                  <div
                     style={{
                       marginTop: "2%",
                       marginLeft: "-2%",
-                      listStyleType: "none",
-                      display: "flex",
+                      display: "grid",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                      gridTemplateColumns: isDesktop
+                        ? "repeat(6, 0fr)"
+                        : "repeat(3, 0fr)",
                       gap: 30,
                     }}
                   >
-                    <li>
-                      <StatProgressChart
-                        statValue={pokemon.stat.hp}
-                        maxstatValue={maxValues.maxHp}
-                        label={"Hp"}
-                        color={backgroundColor}
-                      />{" "}
-                    </li>
-                    <li>
-                      <StatProgressChart
-                        statValue={pokemon.stat.speed}
-                        maxstatValue={maxValues.maxSpeed}
-                        label={"Speed"}
-                        color={backgroundColor}
-                      />{" "}
-                    </li>
-                    <li>
-                      <StatProgressChart
-                        statValue={pokemon.stat.attack}
-                        maxstatValue={maxValues.maxAttack}
-                        label={"Attack"}
-                        color={backgroundColor}
-                      />{" "}
-                    </li>
-                    <li>
-                      <StatProgressChart
-                        statValue={pokemon.stat.defense}
-                        maxstatValue={maxValues.maxDefense}
-                        label={"Defense"}
-                        color={backgroundColor}
-                      />{" "}
-                    </li>
-                    <li>
-                      <StatProgressChart
-                        statValue={pokemon.stat.specialAttack}
-                        maxstatValue={maxValues.maxSpecialAttack}
-                        label={"S.A"}
-                        color={backgroundColor}
-                      />{" "}
-                    </li>
-                    <li>
-                      <StatProgressChart
-                        statValue={pokemon.stat.specialDefense}
-                        maxstatValue={maxValues.maxSpecialDefense}
-                        label={"S.D"}
-                        color={backgroundColor}
-                      />{" "}
-                    </li>
-                  </ul>
+                    <StatProgressChart
+                      statValue={pokemon.stat.hp}
+                      maxstatValue={maxValues.maxHp}
+                      label={"Hp"}
+                      color={backgroundColor}
+                    />{" "}
+                    <StatProgressChart
+                      statValue={pokemon.stat.speed}
+                      maxstatValue={maxValues.maxSpeed}
+                      label={"Speed"}
+                      color={backgroundColor}
+                    />{" "}
+                    <StatProgressChart
+                      statValue={pokemon.stat.attack}
+                      maxstatValue={maxValues.maxAttack}
+                      label={"Attack"}
+                      color={backgroundColor}
+                    />{" "}
+                    <StatProgressChart
+                      statValue={pokemon.stat.defense}
+                      maxstatValue={maxValues.maxDefense}
+                      label={"Defense"}
+                      color={backgroundColor}
+                    />{" "}
+                    <StatProgressChart
+                      statValue={pokemon.stat.specialAttack}
+                      maxstatValue={maxValues.maxSpecialAttack}
+                      label={"S.A"}
+                      color={backgroundColor}
+                    />{" "}
+                    <StatProgressChart
+                      statValue={pokemon.stat.specialDefense}
+                      maxstatValue={maxValues.maxSpecialDefense}
+                      label={"S.D"}
+                      color={backgroundColor}
+                    />{" "}
+                  </div>
                 </div>
                 <div>
                   <strong>Description:</strong> <i> {pokemon.description} </i>
