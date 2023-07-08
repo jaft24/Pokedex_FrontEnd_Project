@@ -9,7 +9,6 @@ import Color from "color-thief-react";
 import LoadingComponent from "@/components/LoadingComponent";
 import ErrorComponent from "@/components/ErrorComponent";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { useLongMobileQuery } from "@/hooks/useMediaQuery";
 import { useEffect, useState } from "react";
 import { TypeButton } from "@/components/FilterButtons";
 import { eggGroupHexColor, typeHexColor } from "@/data/colors";
@@ -23,7 +22,6 @@ import { Button } from "react-bootstrap";
 export default function PokemonDetailsPage() {
   const isDesktop = useMediaQuery("(min-width: 960px)");
   const isTablet = useMediaQuery("(min-width: 560px)");
-  const isLongMobile = useLongMobileQuery();
 
   const router = useRouter();
   const pokemonName = router.query.pokemon?.toString() || "";
@@ -113,7 +111,7 @@ export default function PokemonDetailsPage() {
               {({ data }) => {
                 if (typeof data === "string") {
                   setBackgroundColor(data);
-                  document.body.style.background = data;
+                  document.body.style.background = isTablet ? data : "";
                 }
                 return null;
               }}
@@ -132,7 +130,7 @@ export default function PokemonDetailsPage() {
                 minWidth: "354px",
                 borderRadius: isTablet ? 20 : 0,
                 marginLeft: 20,
-                paddingBottom: isLongMobile ? 70 : 50,
+                borderColor: isTablet ? "" : "white",
               }}
             >
               <div

@@ -16,23 +16,4 @@ const useMediaQuery = (query: string) => {
   return matches;
 };
 
-export const useLongMobileQuery = () => {
-  const [isLongMobile, setIsLongMobile] = useState(false);
-
-  useEffect(() => {
-    const handleOrientationChange = () => {
-      const { height, width } = window.screen;
-      const ratio = height / width;
-      setIsLongMobile(ratio >= 2.3);
-    };
-
-    handleOrientationChange();
-
-    window.addEventListener("resize", handleOrientationChange);
-    return () => window.removeEventListener("resize", handleOrientationChange);
-  }, []);
-
-  return isLongMobile;
-};
-
 export default useMediaQuery;
