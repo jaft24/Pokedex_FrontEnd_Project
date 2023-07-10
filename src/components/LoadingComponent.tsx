@@ -8,7 +8,7 @@ export default function LoadingComponent() {
         transform: "translate(-50%, -65%)",
       }}
     >
-      <img src="/pikachu_walking.gif" />
+      <img src="/pikachu_walking.gif" alt="Pokemon Loading Logo" />
       <p className="font-monospace text-center text-capitalize">
         {" "}
         Loading . . .
