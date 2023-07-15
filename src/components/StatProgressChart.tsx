@@ -1,9 +1,7 @@
-import { CircularProgressbar } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
 import VisibilitySensor from "react-visibility-sensor";
-import styles from "@/styles/SearchBar.module.css";
+import { Box, CircularProgress, CircularProgressLabel } from "@chakra-ui/react";
 
-export default function StatProgressChart({
+const StatProgressChart = ({
   statValue,
   maxstatValue,
   label,
@@ -13,33 +11,31 @@ export default function StatProgressChart({
   maxstatValue: number;
   label: string;
   color: string;
-}) {
+}) => {
   return (
-    <div style={{ width: "100px" }} className={styles.pokemon_components}>
+    <Box w="100px" _hover={{ transform: "scale(1.2)" }}>
       <VisibilitySensor>
-        {({ isVisible }: { isVisible: any }) => {
+        {({ isVisible }: { isVisible: boolean }) => {
           const percentage = isVisible
             ? parseInt(((statValue * 100) / maxstatValue).toFixed(0))
             : 0;
           return (
-            <CircularProgressbar
-              styles={{
-                path: {
-                  stroke: color,
-                  transformOrigin: "center center",
-                  transition: "stroke-dashoffset 2s ease 0s",
-                },
-                text: {
-                  fontSize: "12px",
-                  fill: "black",
-                },
-              }}
+            <CircularProgress
               value={percentage}
-              text={`${label}:${statValue}`}
-            />
+              color={color}
+              thickness={7}
+              size="110px"
+              capIsRound
+            >
+              <CircularProgressLabel fontSize="12px" color="black">
+                {`${label}:${statValue}`}
+              </CircularProgressLabel>
+            </CircularProgress>
           );
         }}
       </VisibilitySensor>
-    </div>
+    </Box>
   );
-}
+};
+
+export default StatProgressChart;

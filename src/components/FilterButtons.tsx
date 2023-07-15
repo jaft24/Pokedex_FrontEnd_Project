@@ -1,70 +1,38 @@
-import { useState } from "react";
+import { Button } from "@chakra-ui/react";
 
-export function TypeButton({
-  typeName,
-  typeColor,
+const FilterButton = ({
+  filterName,
+  filterColor,
   isSelected,
   onClick,
 }: {
-  typeName: string;
-  typeColor: string;
+  filterName: string;
+  filterColor: string;
   isSelected: boolean;
   onClick: () => void;
-}) {
-  const [isHovered, setIsHovered] = useState(false);
+}) => (
+  <Button
+    w={61}
+    h={25}
+    bg={isSelected ? filterColor + "9d" : filterColor + "0d"}
+    borderRadius={4}
+    borderWidth={1.5}
+    borderColor={filterColor}
+    justifyContent="center"
+    alignItems="center"
+    display="inline-flex"
+    fontFamily="Roboto"
+    fontWeight="bold"
+    letterSpacing={0.5}
+    fontSize={12}
+    color={filterColor}
+    _hover={{
+      bg: filterColor + "9d",
+    }}
+    onClick={onClick}
+  >
+    {filterName.length > 8 ? `${filterName.substring(0, 7)}` : filterName}
+  </Button>
+);
 
-  const handleHover = () => {
-    setIsHovered(true);
-  };
-
-  const handleHoverExit = () => {
-    setIsHovered(false);
-  };
-
-  const buttonBackground = isSelected
-    ? typeColor + "9d"
-    : isHovered
-    ? typeColor + "9d"
-    : typeColor + "0d";
-
-  return (
-    <div>
-      <button
-        style={{
-          width: 59,
-          height: 24,
-          background: buttonBackground,
-          borderRadius: 4,
-          border: `1.5px ${typeColor} solid`,
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          gap: 8,
-          display: "inline-flex",
-        }}
-        onMouseEnter={handleHover}
-        onMouseLeave={handleHoverExit}
-        onClick={onClick}
-      >
-        {" "}
-        <div
-          style={{
-            color: typeColor,
-            fontSize: 12,
-            margin: "auto",
-            fontFamily: "Roboto",
-            fontWeight: "500",
-            letterSpacing: 0.5,
-            wordWrap: "break-word",
-          }}
-        >
-          <strong>
-            {" "}
-            {typeName.length > 8
-              ? `${typeName.substring(0, 7)}`
-              : typeName}{" "}
-          </strong>
-        </div>{" "}
-      </button>
-    </div>
-  );
-}
+export default FilterButton;

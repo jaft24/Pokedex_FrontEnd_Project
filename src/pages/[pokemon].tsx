@@ -10,14 +10,17 @@ import LoadingComponent from "@/components/LoadingComponent";
 import ErrorComponent from "@/components/ErrorComponent";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { useEffect, useState } from "react";
-import { TypeButton } from "@/components/FilterButtons";
-import { eggGroupHexColor, typeHexColor } from "@/data/colors";
+import FilterButton from "@/components/FilterButtons";
+import { eggGroupHexColor, typeHexColor } from "@/data/pokemon/colors";
 import {
   getPokemonGifBackByName,
   getPokemonGifByName,
 } from "@/image/pokemonGif";
 import StatProgressChart from "@/components/StatProgressChart";
 import { Button } from "react-bootstrap";
+import beautifyString from "../../utils/beautifyString";
+import { pokemonIds } from "@/data/pokemon/PokemonId";
+import { maxStatValues } from "@/data/pokemon/maxStatValues";
 
 export default function PokemonDetailsPage() {
   const isDesktop = useMediaQuery("(min-width: 960px)");
@@ -37,53 +40,20 @@ export default function PokemonDetailsPage() {
     isLoading: pokemonLoading,
   } = useSWR(pokemonName, PokemonApi.getPokemon);
 
-  const maxValues = {
-    maxHp: 255,
-    maxSpeed: 160,
-    maxAttack: 165,
-    maxDefense: 230,
-    maxSpecialAttack: 154,
-    maxSpecialDefense: 230,
-  };
-
-  const { data, isLoading } = useSWR(["getPokemonPage", currentPage], () =>
-    PokemonApi.getPokemonPage({ page: currentPage })
-  );
   const { data: previousPokemon } = useSWR(
     pokemon && pokemon.id > 1 ? String(pokemon?.id - 1) : null,
     PokemonApi.getPokemonbyId
   );
   const { data: nextPokemon } = useSWR(
-    data && pokemon && pokemon?.id < data?.totalElements
-      ? String(pokemon?.id + 1)
-      : null,
+    pokemon && pokemon?.id < pokemonIds.length ? String(pokemon?.id + 1) : null,
     PokemonApi.getPokemonbyId
   );
-  function handlePreviousPokemon() {
-    if (previousPokemon) {
-      router.push(`/${previousPokemon.name}?page=${currentPage}`);
-    }
-  }
-  function handleNextPokemon() {
-    if (nextPokemon) {
-      router.push(`/${nextPokemon.name}?page=${currentPage}`);
-    }
-  }
   function handleBackToListClick() {
     const queryParams = new URLSearchParams({ page: previousPage.toString() });
     const url = `/?${queryParams.toString()}`;
     window.location.href = url;
   }
 
-  function beautifyString(str: string): string {
-    const words = str.split("-");
-    const capitalizedWords = words.map((word) => {
-      const firstLetter = word.charAt(0).toUpperCase();
-      const restOfWord = word.slice(1);
-      return firstLetter + restOfWord;
-    });
-    return capitalizedWords.join(" ");
-  }
   if (pokemonError) {
     return <ErrorComponent />;
   } else if (pokemonLoading) {
@@ -93,7 +63,6 @@ export default function PokemonDetailsPage() {
   return (
     <>
       <Head>{pokemon && <title> {pokemon.name} </title>}</Head>
-
       <div
         style={{
           minWidth: "356px",
@@ -224,10 +193,10 @@ export default function PokemonDetailsPage() {
                         transform: "scale(1.15)",
                       }}
                     >
-                      <TypeButton
-                        typeName={beautifyString(type.type)}
-                        typeColor={
-                          typeHexColor.find((t) => t.type === type.type)
+                      <FilterButton
+                        filterName={beautifyString(type.type)}
+                        filterColor={
+                          typeHexColor.find((t) => t.name === type.type)
                             ?.color || ""
                         }
                         isSelected={false}
@@ -574,11 +543,11 @@ export default function PokemonDetailsPage() {
                           transform: "scale(1.15)",
                         }}
                       >
-                        <TypeButton
-                          typeName={beautifyString(egg.eggGroup)}
-                          typeColor={
+                        <FilterButton
+                          filterName={beautifyString(egg.eggGroup)}
+                          filterColor={
                             eggGroupHexColor.find(
-                              (e) => e.eggGroup === egg.eggGroup
+                              (e) => e.name === egg.eggGroup
                             )?.color || ""
                           }
                           isSelected={false}
@@ -611,37 +580,37 @@ export default function PokemonDetailsPage() {
                   >
                     <StatProgressChart
                       statValue={pokemon.stat.hp}
-                      maxstatValue={maxValues.maxHp}
+                      maxstatValue={maxStatValues.hp}
                       label={"Hp"}
                       color={backgroundColor}
                     />{" "}
                     <StatProgressChart
                       statValue={pokemon.stat.speed}
-                      maxstatValue={maxValues.maxSpeed}
+                      maxstatValue={maxStatValues.speed}
                       label={"Speed"}
                       color={backgroundColor}
                     />{" "}
                     <StatProgressChart
                       statValue={pokemon.stat.attack}
-                      maxstatValue={maxValues.maxAttack}
+                      maxstatValue={maxStatValues.attack}
                       label={"Attack"}
                       color={backgroundColor}
                     />{" "}
                     <StatProgressChart
                       statValue={pokemon.stat.defense}
-                      maxstatValue={maxValues.maxDefense}
+                      maxstatValue={maxStatValues.defense}
                       label={"Defense"}
                       color={backgroundColor}
                     />{" "}
                     <StatProgressChart
                       statValue={pokemon.stat.specialAttack}
-                      maxstatValue={maxValues.maxSpecialAttack}
+                      maxstatValue={maxStatValues.specialAttack}
                       label={"S.A"}
                       color={backgroundColor}
                     />{" "}
                     <StatProgressChart
                       statValue={pokemon.stat.specialDefense}
-                      maxstatValue={maxValues.maxSpecialDefense}
+                      maxstatValue={maxStatValues.specialDefense}
                       label={"S.D"}
                       color={backgroundColor}
                     />{" "}
@@ -654,7 +623,11 @@ export default function PokemonDetailsPage() {
               <div className="font-monospace d-flex justify-content-center gap-3">
                 {previousPokemon && (
                   <Button
-                    onClick={handlePreviousPokemon}
+                    onClick={() =>
+                      router.push(
+                        `/${previousPokemon.name}?page=${currentPage}`
+                      )
+                    }
                     style={{
                       width: "50%",
                       backgroundColor: backgroundColor,
@@ -669,7 +642,9 @@ export default function PokemonDetailsPage() {
                 )}{" "}
                 {nextPokemon && (
                   <Button
-                    onClick={handleNextPokemon}
+                    onClick={() =>
+                      router.push(`/${nextPokemon.name}?page=${currentPage}`)
+                    }
                     style={{
                       width: "50%",
                       backgroundColor: backgroundColor,

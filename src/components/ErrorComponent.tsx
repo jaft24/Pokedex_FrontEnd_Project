@@ -1,37 +1,19 @@
-import { Button } from "react-bootstrap";
-import styles from "@/styles/SearchBar.module.css";
+import { Box, Image, Text } from "@chakra-ui/react";
+import { singleComponents } from "@/data/styles/singleComponentStyles";
+import MyButton from "./MyButton";
 
-export default function ErrorComponent() {
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -65%)",
-        justifyContent: "center",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <img src="/pikachu_404Error.gif" />
-      <p className="font-monospace text-center text-capitalize">
-        {" "}
-        404 Not Found!
-        <br />
-        The Page You Requested Is Not Found.
-        <br />
-        Go back to the Home Page.
-      </p>
-      <Button
-        style={{ width: "50%" }}
-        onClick={() => (window.location.href = "/")}
-        className={styles.custom_button}
-      >
-        {" "}
-        ← Home{" "}
-      </Button>
-    </div>
-  );
-}
+const ErrorComponent = () => (
+  <Box sx={singleComponents}>
+    <Image src="/pikachu_404Error.gif" alt="Pikachu Error Image" />
+    <Text>
+      404 Not Found!
+      <br />
+      The Page You Requested Is Not Found.
+      <br />
+      Go back to the Home Page.
+    </Text>
+    <MyButton onClick={() => (window.location.href = "/")}>← Home</MyButton>
+  </Box>
+);
+
+export default ErrorComponent;

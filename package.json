@@ -11,15 +11,23 @@
     "coverage": "jet --coverage"
   },
   "dependencies": {
-    "@react-keycloak/ssr": "^3.3.0",
+    "@chakra-ui/react": "^2.7.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@react-keycloak/ssr": "^3.0.0",
     "@types/node": "20.3.1",
     "@types/react": "18.2.13",
     "@types/react-dom": "18.2.6",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
     "color-thief-react": "^2.1.0",
+    "cookie": "^0.5.0",
     "eslint": "8.43.0",
     "eslint-config-next": "13.4.6",
+    "framer-motion": "^10.12.20",
+    "http-proxy-middleware": "^2.0.6",
+    "jsonwebtoken": "^9.0.1",
+    "keycloak-js": "^11.0.3",
     "next": "13.4.6",
     "react": "18.2.0",
     "react-bootstrap": "^2.7.4",
@@ -33,6 +41,8 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
+    "@types/cookie": "^0.5.1",
+    "@types/jsonwebtoken": "^9.0.2",
     "jest": "^29.6.1",
     "jest-environment-jsdom": "^29.6.1",
     "next-router-mock": "^0.9.7"

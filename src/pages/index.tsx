@@ -6,72 +6,69 @@ import * as PokemonApi from "@/network/pokemonApi";
 import { Button, Col, Row, Spinner } from "react-bootstrap";
 import { SetStateAction, useEffect, useState } from "react";
 import SearchComponent from "@/components/SearchComponent";
-import MoreFilters from "@/components/MoreFilters";
+import MoreFilters from "@/components/MoreFiltersComponents";
 import styles from "@/styles/SearchBar.module.css";
-import { pokemonNames } from "@/data/pokemonNames";
+import { pokemonNames } from "@/data/pokemon/pokemonNames";
 import { AxiosError } from "axios";
 import LoadingComponent from "@/components/LoadingComponent";
 import ErrorComponent from "@/components/ErrorComponent";
 import PokemonNotFoundComponent from "@/components/PokemonNotFoundComponent";
+import { pokemonIds } from "@/data/pokemon/PokemonId";
 
 export default function Home() {
   const router = useRouter();
   const page = parseInt(router.query.page?.toString() || "0");
 
-  const pokemonIds: number[] = Array.from(
-    { length: pokemonNames.length },
-    (_, i) => i + 1
-  );
+  const [name, setName] = useState<string>("");
+  const [id, setId] = useState<number>(0);
 
-  const [name, setName] = useState<string | undefined>(undefined);
-  const [id, setId] = useState<string | undefined>(undefined);
+  const [height, setHeight] = useState<number>(0);
+  const [weight, setWeight] = useState<number>(0);
+  const [type, setType] = useState<string>("");
+  const [ability, setAbility] = useState<string>("");
+  const [eggGroup, setEggGroup] = useState<string>("");
+  const [genus, setGenus] = useState<string>("");
+
+  const [selectedHeight, setSelectedHeight] = useState(0);
+  const handleHeightChange = (selectedValue: number) => {
+    setSelectedHeight(selectedValue);
+  };
+  const [selectedWeight, setSelectedWeight] = useState(0);
+  const handleWeightChange = (selectedValue: number) => {
+    setSelectedWeight(selectedValue);
+  };
+  const [selectedType, setSelectedType] = useState("");
+  const handleTypeChange = (selectedValue: string) => {
+    setSelectedType(selectedValue);
+  };
+  const [selectedAbility, setSelectedAbility] = useState("");
+  const handleAbilityChange = (selectedValue: string) => {
+    setSelectedAbility(selectedValue);
+  };
+  const [selectedEggGroup, setSelectedEggGroup] = useState("");
+  const handleEggGroupChange = (selectedValue: string) => {
+    setSelectedEggGroup(selectedValue);
+  };
+  const [selectedGenus, setSelectedGenus] = useState("");
+  const handleGenusChange = (selectedValue: string) => {
+    setSelectedGenus(selectedValue);
+  };
+
   const [gridVisibility, setGridVisibility] = useState("block");
   const [showAdvacnedFeaturesButton, setShowAdvacnedFeaturesButton] =
     useState(true);
   const [showAdvacnedFeatures, setShowAdvacnedFeatures] = useState(false);
   const [hideAdvacnedFeaturesButton, setHidehowAdvacnedFeatures] =
     useState(false);
-
   const [searchText, setSearchText] = useState<string | number>("");
   const [selectedSearchBy, setSelectedSearchBy] = useState("Name");
   const [matchedPokemon, setMatchedPokemon] = useState<string[] | number[]>([]);
-
-  const [selectedSortBy, setSelectedSortBy] = useState("1");
+  const [selectedSortBy, setSelectedSortBy] = useState("");
   const handleSortByChange = (selectedValue: SetStateAction<string>) => {
     setSelectedSortBy(selectedValue);
   };
   const sort = selectedSortBy;
 
-  const [height, setHeight] = useState<number | undefined>(undefined);
-  const [selectedHeight, setSelectedHeight] = useState(undefined);
-  const handleHeightChange = (selectedValue: SetStateAction<undefined>) => {
-    setSelectedHeight(selectedValue);
-  };
-  const [weight, setWeight] = useState<number | undefined>(undefined);
-  const [selectedWeight, setSelectedWeight] = useState(undefined);
-  const handleWeightChange = (selectedValue: SetStateAction<undefined>) => {
-    setSelectedWeight(selectedValue);
-  };
-  const [type, setType] = useState<string | undefined>(undefined);
-  const [selectedType, setSelectedType] = useState(undefined);
-  const handleTypeChange = (selectedValue: SetStateAction<undefined>) => {
-    setSelectedType(selectedValue);
-  };
-  const [ability, setAbility] = useState<string | undefined>(undefined);
-  const [selectedAbility, setSelectedAbility] = useState(undefined);
-  const handleAbilityChange = (selectedValue: SetStateAction<undefined>) => {
-    setSelectedAbility(selectedValue);
-  };
-  const [eggGroup, setEggGroup] = useState<string | undefined>(undefined);
-  const [selectedEggGroup, setSelectedEggGroup] = useState(undefined);
-  const handleEggGroupChange = (selectedValue: SetStateAction<undefined>) => {
-    setSelectedEggGroup(selectedValue);
-  };
-  const [genus, setGenus] = useState<string | undefined>(undefined);
-  const [selectedGenus, setSelectedGenus] = useState(undefined);
-  const handleGenusChange = (selectedValue: SetStateAction<undefined>) => {
-    setSelectedGenus(selectedValue);
-  };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
@@ -99,6 +96,8 @@ export default function Home() {
       setMatchedPokemon([]);
     }
   };
+
+  // These need to go back to the MoreFilters Component?
   const handleShowAdvacnedSearch = () => {
     setShowAdvacnedFeatures(true);
     setShowAdvacnedFeaturesButton(false);
@@ -120,14 +119,14 @@ export default function Home() {
         selectedSearchBy == "Name" &&
         matchedPokemon.some((each) => each === searchText)
       ) {
-        setId(undefined);
+        setId(0);
         setName(searchText.toString());
       } else if (
         selectedSearchBy == "Id" &&
         matchedPokemon.some((each) => each === searchText)
       ) {
-        setName(undefined);
-        setId(searchText.toString());
+        setName("");
+        setId(parseFloat(searchText.toString()));
       }
     }
   };
@@ -135,11 +134,11 @@ export default function Home() {
     setGridVisibility("block");
     router.push({ query: { ...router.query, page: 0 } });
     if (selectedSearchBy == "Name") {
-      setId(undefined);
+      setId(0);
       setName(pokemon.toString());
     } else if (selectedSearchBy == "Id") {
-      setName(undefined);
-      setId(pokemon.toString());
+      setName("");
+      setId(parseFloat(pokemon.toString()));
     }
   };
   const handleAdvacnedSearch = () => {
@@ -248,18 +247,20 @@ export default function Home() {
             onSearchSubmit={handleSearchSubmit}
             onListClick={handleListClick}
           />
-
           <div
             style={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              margin: 20,
-              marginTop: -30,
+              marginBottom: 20,
             }}
           >
             {showAdvacnedFeaturesButton && (
-              <div>
+              <div
+                style={{
+                  display: "flex",
+                }}
+              >
                 <Button
                   style={{}}
                   className={styles.custom_button}
@@ -330,7 +331,7 @@ export default function Home() {
               </Row>
 
               <div
-                style={{ marginBottom: 70 }}
+                style={{ marginTop: -5, marginBottom: 70 }}
                 className="d-flex justify-content-center gap-5"
               >
                 {!data?.first && (
