@@ -54,7 +54,7 @@ const SearchComponent = ({
         selectedSearchBy={selectedSearchBy}
         onSearchByChange={onSearchByChange}
       />
-      <Box ref={ref} order={isDesktop ? [2] : [3]}>
+      <Box ref={ref} mt={isDesktop ? "" : "-5"} order={isDesktop ? [2] : [3]}>
         <SearchBar
           searchText={searchText}
           onInputChange={onInputChange}

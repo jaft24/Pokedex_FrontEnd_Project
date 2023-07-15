@@ -3,7 +3,7 @@ import { eggGroupHexColor } from "@/data/pokemon/colors";
 import { abilities } from "@/data/pokemon/abilities";
 import { genuses } from "@/data/pokemon/genuses";
 import { pokemonValues } from "@/data/pokemon/pokemonValues";
-import { Flex, Box } from "@chakra-ui/react";
+import { Flex, Box, useMediaQuery } from "@chakra-ui/react";
 import FilterButtons from "./FilterButtons";
 import RangeFilters from "./RangeFilters";
 import SelectFilters from "./SelectFilters";
@@ -41,6 +41,9 @@ const MoreFilters = ({
   onClickAdvancedSearch: () => void;
   onClickClearFilters: () => void;
 }) => {
+  const [isDesktop] = useMediaQuery("(min-width: 928px)");
+  const [isTablet] = useMediaQuery("(min-width: 574px)");
+
   return (
     <Flex
       flexDirection="column"
@@ -56,7 +59,12 @@ const MoreFilters = ({
       _hover={{ background: "rgba(255, 255, 255, 0.5)" }}
     >
       <TextHeader />
-      <Flex justify="center" wrap="wrap" gap="10">
+      <Flex
+        w={isDesktop ? "" : isTablet ? "450px" : "250px"}
+        justify="center"
+        wrap="wrap"
+        gap="10"
+      >
         <FilterButtons
           title="Type"
           data={typeHexColor}
