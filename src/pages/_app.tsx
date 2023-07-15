@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 import { Container } from "react-bootstrap";
 import Head from "next/head";
-
+import { ChakraProvider } from "@chakra-ui/react";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -15,19 +15,23 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/pokedex_logo.ico" />
       </Head>
 
+      {/* Use Media Query for Desktop and Phone minWidth to run the same background */}
       <div>
         <main>
           <Container
             style={{
               maxWidth: "1400px",
               minWidth: "356px",
+              minHeight: "1100px",
               backgroundImage: "url('/background_image.png')",
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
             }}
           >
-            <Component {...pageProps} />
+            <ChakraProvider>
+              <Component {...pageProps} />
+            </ChakraProvider>
           </Container>
         </main>
       </div>
