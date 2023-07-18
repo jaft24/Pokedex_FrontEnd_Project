@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import Image from "next/image";
-import { getPokemonImageUrl } from "@/image/pokemonImage";
+import { getPokemonImageUrl } from "../../../utils/pokemonImage";
 
 const PokemonImage = ({ id, name }: { id: number; name: string }) => (
   <Box>

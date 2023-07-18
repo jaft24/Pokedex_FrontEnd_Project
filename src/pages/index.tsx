@@ -3,13 +3,12 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import Link from "next/link";
 import * as PokemonApi from "@/network/pokemonApi";
-import { Button, Col, Row, Spinner } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import { SetStateAction, useEffect, useState } from "react";
 import SearchComponent from "@/components/SearchComponent";
 import MoreFilters from "@/components/MoreFiltersComponents";
 import styles from "@/styles/SearchBar.module.css";
 import { pokemonNames } from "@/data/pokemon/pokemonNames";
-import { AxiosError } from "axios";
 import LoadingComponent from "@/components/LoadingComponent";
 import ErrorComponent from "@/components/ErrorComponent";
 import PokemonNotFoundComponent from "@/components/PokemonNotFoundComponent";
@@ -63,7 +62,7 @@ export default function Home() {
   const [searchText, setSearchText] = useState<string | number>("");
   const [selectedSearchBy, setSelectedSearchBy] = useState("Name");
   const [matchedPokemon, setMatchedPokemon] = useState<string[] | number[]>([]);
-  const [selectedSortBy, setSelectedSortBy] = useState("");
+  const [selectedSortBy, setSelectedSortBy] = useState("asc");
   const handleSortByChange = (selectedValue: SetStateAction<string>) => {
     setSelectedSortBy(selectedValue);
   };
@@ -323,8 +322,8 @@ export default function Home() {
                     }}
                     key={pokemonEntry.name}
                   >
-                    <Link href={"/" + pokemonEntry.name + "?page=" + page}>
-                      <PokemonEntry name={pokemonEntry.name} />
+                    <Link href={"/" + pokemonEntry.id + "?page=" + page}>
+                      <PokemonEntry id={pokemonEntry.id} />
                     </Link>
                   </Col>
                 ))}

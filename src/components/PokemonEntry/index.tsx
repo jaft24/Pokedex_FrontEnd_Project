@@ -4,8 +4,8 @@ import PokemonName from "./PokemonName";
 import PokemonTypeSection from "./PokemonTypeSection";
 import usePokemon from "@/hooks/usePokemon";
 
-const PokemonEntry = ({ name }: { name: string }) => {
-  const { pokemon, pokemonLoading } = usePokemon(name);
+const PokemonEntry = ({ id }: { id: number }) => {
+  const { pokemon, pokemonLoading } = usePokemon(id);
   return (
     <Box
       display="felx"

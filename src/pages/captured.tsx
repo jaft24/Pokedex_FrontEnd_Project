@@ -1,11 +1,11 @@
 import useSWR from "swr";
-import * as PokemonApi from "@/network/pokemonApi";
+import * as api from "@/network/capturedApi";
 
 export default function Captured() {
   const { data, error, isLoading } = useSWR(
     ["getCapturedPokemonList"],
     async () => {
-      return await PokemonApi.getCapturedPokemonList();
+      return await api.getCapturedPokemonList();
     }
   );
 

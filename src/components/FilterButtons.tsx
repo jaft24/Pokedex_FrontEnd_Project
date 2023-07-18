@@ -4,12 +4,12 @@ const FilterButton = ({
   filterName,
   filterColor,
   isSelected,
-  onClick,
+  onClick = () => null,
 }: {
   filterName: string;
   filterColor: string;
   isSelected: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }) => (
   <Button
     w={61}
@@ -31,7 +31,7 @@ const FilterButton = ({
     }}
     onClick={onClick}
   >
-    {filterName.length > 8 ? `${filterName.substring(0, 7)}` : filterName}
+    {filterName.length > 8 ? `${filterName.substring(0, 6)}...` : filterName}
   </Button>
 );
 

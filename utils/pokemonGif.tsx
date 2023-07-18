@@ -1,5 +1,9 @@
 export function getPokemonGifByName(name: string) {
-  let properName = name.toLowerCase().replace("♂", "_m").replace("♀", "_f");
+  let properName = name
+    .toLowerCase()
+    .replace("♂", "_m")
+    .replace("♀", "_f")
+    .replace("’", "");
   if (properName == "mime jr.") {
     properName = "mime_jr";
   } else if (properName == "mr. mime") {
@@ -11,7 +15,11 @@ export function getPokemonGifByName(name: string) {
 }
 
 export function getPokemonGifBackByName(name: string) {
-  let properName = name.toLowerCase().replace("♂", "_m").replace("♀", "_f");
+  let properName = name
+    .toLowerCase()
+    .replace("♂", "_m")
+    .replace("♀", "_f")
+    .replace("’", "");
   if (properName == "mime jr.") {
     properName = "mime_jr";
   } else if (properName == "mr. mime") {

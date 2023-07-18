@@ -28,7 +28,7 @@ const SelectFilters = ({
         value={selectedValue ?? ""}
         onChange={(event) => onSelectedValueChange(event.target.value)}
       >
-        <option value={""}></option>
+        <option value=""></option>
         {options.map((option) => (
           <option key={option.id} value={option.name}>
             {beautifyString(option.name)}

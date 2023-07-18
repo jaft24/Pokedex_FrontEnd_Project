@@ -1,11 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { Inter } from "next/font/google";
 import { Container } from "react-bootstrap";
 import Head from "next/head";
 import { ChakraProvider } from "@chakra-ui/react";
-const inter = Inter({ subsets: ["latin"] });
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

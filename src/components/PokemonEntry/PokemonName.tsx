@@ -1,4 +1,4 @@
-import { Box, Text, Flex, HStack } from "@chakra-ui/react";
+import { Text, HStack } from "@chakra-ui/react";
 
 const PokemonName = ({ id, name }: { id: number; name: string }) => (
   <HStack align="center" justifyContent="space-between">
