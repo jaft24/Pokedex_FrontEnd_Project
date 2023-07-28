@@ -9,6 +9,7 @@ import RangeFilters from "./RangeFilters";
 import SelectFilters from "./SelectFilters";
 import FooterButtons from "./FooterButtons";
 import TextHeader from "./TextHeader";
+import { Button } from "react-bootstrap";
 
 const MoreFilters = ({
   selectedHeight,
@@ -24,7 +25,6 @@ const MoreFilters = ({
   selectedAbility,
   onSelectedAbilityChange,
   onClickAdvancedSearch,
-  onClickClearFilters,
 }: {
   selectedHeight: number;
   onSelectedHeightChange: (value: number) => void;
@@ -39,9 +39,8 @@ const MoreFilters = ({
   selectedAbility: string;
   onSelectedAbilityChange: (value: string) => void;
   onClickAdvancedSearch: () => void;
-  onClickClearFilters: () => void;
 }) => {
-  const [isDesktop] = useMediaQuery("(min-width: 928px)");
+  const [isDesktop] = useMediaQuery("(min-width: 1200px)");
   const [isTablet] = useMediaQuery("(min-width: 574px)");
 
   return (
@@ -50,13 +49,14 @@ const MoreFilters = ({
       alignItems="center"
       gap={5}
       margin={3}
-      marginBottom={10}
       padding={10}
       background="rgba(255, 255, 255, 0.1)"
       borderRadius="16px"
-      boxShadow="0 4px 30px rgba(0, 0, 0, 0.5)"
+      boxShadow="0 0px 10px rgba(0, 0, 0, 0.5)"
       fontFamily="monospace"
       _hover={{ background: "rgba(255, 255, 255, 0.5)" }}
+      borderTopWidth="10px"
+      borderColor="gray.200"
     >
       <TextHeader />
       <Flex
@@ -114,10 +114,7 @@ const MoreFilters = ({
           />
         </Box>
       </Flex>
-      <FooterButtons
-        onClickClearFilters={onClickClearFilters}
-        onClickAdvancedSearch={onClickAdvancedSearch}
-      />
+      <FooterButtons onClickAdvancedSearch={onClickAdvancedSearch} />
     </Flex>
   );
 };
