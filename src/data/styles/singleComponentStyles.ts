@@ -11,3 +11,16 @@ export const singleComponents = {
   fontSize: "l",
   fontWeight: "medium",
 };
+
+export const authComponents = {
+  position: "realtive",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  textAlign: "center",
+  justifyContent: " center",
+  fontFamily: "monospace",
+  textTransform: "capitalize",
+  fontSize: "l",
+  fontWeight: "medium",
+};

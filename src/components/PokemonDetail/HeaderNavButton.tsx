@@ -12,13 +12,11 @@ const HeaderNavButton = ({
 }) => {
   const router = useRouter();
 
-  const handleClick = () => {
-    isHomeButton ? router.push(`/`) : router.push(`/?page=${currentPage}`);
-  };
-
   return (
     <Button
-      onClick={handleClick}
+      onClick={() => {
+        isHomeButton ? router.push(`/`) : router.push(`/?page=${currentPage}`);
+      }}
       width="30%"
       backgroundColor={bgColor}
       opacity={0.75}

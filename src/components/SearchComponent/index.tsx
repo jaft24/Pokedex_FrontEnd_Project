@@ -29,7 +29,7 @@ const SearchComponent = ({
   onSearchSubmit: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onListClick: (pokemon: string | number) => void;
 }) => {
-  const [isDesktop] = useMediaQuery("(min-width: 966px)");
+  const [isDesktop] = useMediaQuery("(min-width: 1200px)");
   const handleListClick = (pokemon: string | number) => {
     onListClick(pokemon);
     onSearchTextChange(pokemon);

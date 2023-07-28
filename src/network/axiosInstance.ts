@@ -5,9 +5,4 @@ const axiosInstance = axios.create({
   timeout: 5000,
 });
 
-export const keycloakAxiosInstance = axios.create({
-  baseURL: "http://127.0.0.1:8083/",
-  timeout: 5000,
-});
-
 export default axiosInstance;
