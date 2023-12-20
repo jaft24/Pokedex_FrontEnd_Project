@@ -62,6 +62,7 @@ const ProfileCard = ({
             w={"full"}
             src="/pokeball.gif"
             objectFit={"cover"}
+            alt = "Pokemon Ball"
           />
           <Flex mt={-5} justify={"center"}>
             <Avatar

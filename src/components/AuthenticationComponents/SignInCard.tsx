@@ -35,6 +35,8 @@ const SignInCard = ({
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const boxBgColor = useColorModeValue("red.100", "gray.700");
+
 
   return (
     <Center
@@ -57,6 +59,7 @@ const SignInCard = ({
         h={"170px"}
         src="/pikachuProfileCard.gif"
         objectFit={"cover"}
+        alt = "Pikachu Profile Card"
       />
       <Flex mt={-5} justify={"center"}>
         <Avatar
@@ -79,7 +82,7 @@ const SignInCard = ({
             isInvalid.password) && (
             <Box
               rounded={"lg"}
-              bg={useColorModeValue("red.100", "gray.700")}
+              bg={boxBgColor}
               p={3}
               maxW={320}
             >

@@ -9,7 +9,7 @@ describe("Index page", () => {
   it("Should render the loading component properly", () => {
     const { getByAltText } = render(<Home />);
 
-    const loadingImageElement = getByAltText("Pokemon Loading Logo");
+    const loadingImageElement = getByAltText("Pokemon Loading Image");
 
     expect(loadingImageElement).toBeInTheDocument();
     expect(loadingImageElement.getAttribute("src")).toBe(
@@ -17,18 +17,4 @@ describe("Index page", () => {
     );
   });
 
-  //   it("Shoud finish loading and render pokemon", async () => {
-  //     await act(async () => {
-  //       render(<Home />);
-
-  //       const logoImageElement = screen.getByAltText("Pokemon Logo");
-  //       expect(logoImageElement).toBeInTheDocument();
-  //       expect(logoImageElement.getAttribute("src")).toBe("/pokedex.png");
-  //     });
-
-  //     const showAdvancedFeaturesButton = screen.getByText(
-  //       "↯ Show Advanced Search ↯"
-  //     );
-  //     expect(showAdvancedFeaturesButton).toBeInTheDocument();
-  //   });
 });
