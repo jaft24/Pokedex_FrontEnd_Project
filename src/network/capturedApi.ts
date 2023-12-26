@@ -6,7 +6,7 @@ import axios from "axios";
 export async function getLoginToken(username: string, password: string) {
   try {
         const response = await axios.post(
-          "http://pokedex-backend-project.fly.dev:8083/realms/pokedexapi/protocol/openid-connect/token",
+          "https://pokedex-backend-project.fly.dev:8083/realms/pokedexapi/protocol/openid-connect/token",
           {
             client_id: "trainer",
             username: username,
