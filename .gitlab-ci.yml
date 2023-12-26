@@ -1,6 +1,15 @@
 stages:
+  - lint
   - build
   - test
+  - deploy
+
+lint-job:
+  stage: lint
+  image: node:18
+  script:
+    - npm install
+    - npm run lint
 
 build-job:
   stage: build
@@ -15,3 +24,17 @@ test-job:
   script:
     - npm install
     - npm run test
+
+deploy-job:
+  stage: deploy
+  image: docker:stable
+  services:
+    - docker:dind
+    - node:18-bullseye-slim
+  variables:
+    FLY_API_TOKEN: $FLY_API_TOKEN
+  before_script:
+    - apk add --update curl && rm -rf /var/cache/apk/*
+    - curl -L https://fly.io/install.sh | sh
+  script:
+    - /root/.fly/bin/flyctl deploy
