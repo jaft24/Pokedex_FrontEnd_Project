@@ -30,11 +30,12 @@ export async function getAllPokemon({
   ability: string;
   eggGroup: string;
 }) {
+  const sortOrder = sort;
   const params = {
     page,
     id,
     name,
-    sort,
+    sortOrder: sort,
     genus,
     height,
     weight,

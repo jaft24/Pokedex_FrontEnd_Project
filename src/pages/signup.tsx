@@ -31,10 +31,10 @@ export default function SignUp() {
   const handleSignUp = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8083/realms/pokedexapi/protocol/openid-connect/token",
+        "http://pokedex-backend-project.fly.dev:8083/realms/pokedexapi/protocol/openid-connect/token",
         {
-          client_id: "admin-cli-2",
-          client_secret: "IrlIhrAn1GFzj63lUQhmOfEgtoH9U0oJ",
+          client_id: "admin-cli",
+          client_secret: "TIspf2v8cJwvtnEEPodoiNQIFt7BcsTt",
           grant_type: "client_credentials",
         },
         {

@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://127.0.0.1:8081/",
-  timeout: 5000,
+  baseURL: "http://pokedex-backend-project.fly.dev",
+  timeout: 7000,
 });
 
 export default axiosInstance;
