@@ -67,6 +67,8 @@ const ProfileCard = ({
           <Flex mt={-5} justify={"center"}>
             <Avatar
               size="xl"
+              /* User Image Storage, Picking, Editing is not implemented yet. (Coming soon in the next release ...)
+                 So for now here is a demo sample picture for all users */
               src={"https://avatars3.githubusercontent.com/u/100200?s=460&v=4"}
               name="Author"
               css={{

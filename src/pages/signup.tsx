@@ -31,10 +31,10 @@ export default function SignUp() {
   const handleSignUp = async () => {
     try {
       const response = await axios.post(
-        "https://pokedex-backend-project.fly.dev:8083/realms/pokedexapi/protocol/openid-connect/token",
+        "https://usw2.auth.ac/auth/realms/pokedex-realm/protocol/openid-connect/token",
         {
           client_id: "admin-cli",
-          client_secret: "TIspf2v8cJwvtnEEPodoiNQIFt7BcsTt",
+          client_secret: process.env.KEYCLOAK_ADMIN_CLI_SECRET,
           grant_type: "client_credentials",
         },
         {
@@ -49,7 +49,7 @@ export default function SignUp() {
 
       try {
         const response = await axios.post(
-          "https://pokedex-backend-project.fly.dev:8083/admin/realms/pokedexapi/users",
+          "https://usw2.auth.ac/auth/admin/realms/pokedex-realm/users",
           {
             enabled: true,
             username,

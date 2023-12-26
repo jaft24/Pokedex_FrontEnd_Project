@@ -33,6 +33,8 @@ deploy-job:
     - node:18-bullseye-slim
   variables:
     FLY_API_TOKEN: $FLY_API_TOKEN
+    KEYCLOAK_TRAINER_SECRET: $KEYCLOAK_TRAINER_SECRET
+    KEYCLOAK_ADMIN_CLI_SECRET: $KEYCLOAK_ADMIN_CLI_SECRET
   before_script:
     - apk add --update curl && rm -rf /var/cache/apk/*
     - curl -L https://fly.io/install.sh | sh

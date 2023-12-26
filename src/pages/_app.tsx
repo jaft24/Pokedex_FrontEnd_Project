@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import type { AppProps } from "next/app";
+import 'dotenv/config';
 import { Container } from "react-bootstrap";
 import Head from "next/head";
 import { ChakraProvider } from "@chakra-ui/react";
