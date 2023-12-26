@@ -1,5 +1,6 @@
 stages:
   - build
+  - test
 
 build-job:
   stage: build
@@ -7,3 +8,10 @@ build-job:
   script:
     - npm install
     - npm run build
+
+test-job:
+  stage: test
+  image: node:18
+  script:
+    - npm install
+    - npm run test
