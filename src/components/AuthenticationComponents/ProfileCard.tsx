@@ -14,7 +14,7 @@ import {
   HStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import BlurOverlay from "../BlueOverlay";
+import BlurOverlay from "../BlurOverlay";
 import SignOutConfirmation from "./SignOutConfirmation";
 import { RefObject, useRef } from "react";
 import React from "react";
@@ -31,7 +31,7 @@ const ProfileCard = ({
     useRef<HTMLDivElement>(null);
   return (
     <>
-      <SignOutConfirmation isOpen onClose={onClose} cancelRef={cancelRef} />
+      <BlurOverlay>
       <Center
         position="relative"
         sx={singleComponents}
@@ -50,7 +50,7 @@ const ProfileCard = ({
           x
         </Button>
         <Box
-          maxW={"270px"}
+          maxW={"300px"}
           w={"full"}
           bg={useColorModeValue("white", "gray.800")}
           boxShadow={"2xl"}
@@ -111,13 +111,15 @@ const ProfileCard = ({
               <Button onClick={() => router.push("/captured")} w={"full"}>
                 CAPTURED
               </Button>
-              <Button onClick={onOpen} w={"full"}>
-                SIGN OUT
+              <Button onClick={() => router.push("/")} w={"full"}>
+                 HOME
               </Button>
             </HStack>
+
           </Box>
         </Box>
       </Center>
+      </BlurOverlay>
     </>
   );
 };

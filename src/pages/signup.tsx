@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { Button, Box } from "@chakra-ui/react";
 
 export default function SignUp() {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function SignUp() {
         "https://usw2.auth.ac/auth/realms/pokedex-realm/protocol/openid-connect/token",
         {
           client_id: "admin-cli",
-          client_secret: process.env.KEYCLOAK_ADMIN_CLI_SECRET,
+          client_secret: process.env.NEXT_PUBLIC_KEYCLOAK_ADMIN_CLI_SECRET,
           grant_type: "client_credentials",
         },
         {
@@ -45,7 +46,6 @@ export default function SignUp() {
       );
 
       const { access_token } = response.data;
-      console.log(access_token);
 
       try {
         const response = await axios.post(
@@ -76,8 +76,7 @@ export default function SignUp() {
           }
         );
 
-        console.log("User is created:", firstName + " " + lastName);
-        router.push("/captured");
+        router.push("/signin");
       } catch (error) {
         console.error("User Creation failed:", error);
       }
@@ -87,7 +86,9 @@ export default function SignUp() {
   };
 
   return (
-    <div>
+    <Box>
+      <h1> 🚧  The Sign Up UI is currently under construction. 🚧 </h1>
+      <h3> But please go ahead and create an account, and you will be redirected to Sign In </h3>
       <label>
         First Name:{" "}
         <input type="text" value={firstName} onChange={handleFirstNameChange} />
@@ -116,7 +117,7 @@ export default function SignUp() {
         />
       </label>
       <br />
-      <button onClick={handleSignUp}>Sign Up</button>
-    </div>
+      <Button onClick={handleSignUp}>Sign Up</Button>
+    </Box>
   );
 }

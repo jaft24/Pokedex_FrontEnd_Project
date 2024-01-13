@@ -7,6 +7,8 @@ import { Col, Row } from "react-bootstrap";
 import Link from "next/link";
 import PokemonEntry from "@/components/PokemonEntry";
 import { useEffect } from "react";
+import { Button, Box } from "@chakra-ui/react";
+
 
 export default function Captured() {
   const router = useRouter();
@@ -25,8 +27,27 @@ export default function Captured() {
   });
 
   return (
-    <div>
-      <h1>Hello World</h1>
+    <Box>
+      <h1>🚧  The Captured Page is Currently Under Construction. 🚧</h1>
+      <h2>Come Back Soon for v2 Release, please go back to Home Page</h2>
+      <Button
+            onClick={() => { router.push(`/`) }}
+            width="30%"
+            opacity={0.75}
+            color="black"
+            height="2.5rem"
+            borderRadius="10px"
+            padding="0 15px"
+            boxShadow="0px 0px 8px #ddd"
+            alignItems="center"
+            marginTop="5%"
+            fontSize="16px"
+            _hover={{
+              opacity: 1,
+            }}
+          > Home 🏠
+       </Button>
+
       {isLoading && <p> Data is Loading </p>}
       {error && <p> No Pokemon Captured </p>}
 
@@ -45,6 +66,6 @@ export default function Captured() {
           </Col>
         ))}
       </Row>
-    </div>
+    </Box>
   );
 }

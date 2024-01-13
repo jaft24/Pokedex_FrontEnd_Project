@@ -38,7 +38,7 @@ const ProfileHeader = () => {
   const decodedData = decodeToken(token);
 
   const name =
-    typeof decodedData !== "string" ? decodedData.name : "Invalid Name";
+    typeof decodedData !== "string" ? decodedData.name : "Trainer";
   const imageSrc = "https://bit.ly/ryan-florence";
   const [isDesktop] = useMediaQuery("(min-width: 768px)");
 

@@ -10,7 +10,7 @@ const ErrorComponent = () => (
       <br />
       The Page You Requested Is Not Found.
       <br />
-      Go back to the Home Page.
+      Go back to the Home Page or try Refreshing this Page.
     </Text>
     <MyButton onClick={() => (window.location.href = "/")}>← Home</MyButton>
   </Box>
